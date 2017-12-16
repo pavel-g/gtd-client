@@ -5,14 +5,18 @@
 Ext.define('Gtd.MainView', {
 
 	extend: 'Ext.container.Viewport',
+	
+	requires: [
+		'Gtd.view.Task'
+	],
 
 	layout: 'border',
 	
 	items: [
 		{
 			region: 'west',
+			xtype: 'Gtd.view.Task',
 			collapsible: true,
-			title: 'Списки задач',
 			width: 200
 		},
 		{
