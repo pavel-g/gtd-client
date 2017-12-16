@@ -15,6 +15,18 @@ Ext.define('Gtd.view.Login', {
 				win.on('failure', reject, win, {single: true});
 				win.show();
 			});
+		},
+		
+		checkAuth: function() {
+			return Gtd.core.Ajax.json({
+				url: Gtd.core.Constants.API_URL_PREFIX + '/auth/login',
+				method: 'GET'
+			}).then(function(resp) {
+				if (resp && resp.success) {
+					return true;
+				}
+				return Gtd.view.Login.login();
+			});
 		}
 		
 	},

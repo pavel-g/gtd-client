@@ -7,7 +7,8 @@ Ext.define('Gtd.MainView', {
 	extend: 'Ext.container.Viewport',
 	
 	requires: [
-		'Gtd.view.Task'
+		'Gtd.view.Task',
+		'Gtd.view.Login'
 	],
 
 	layout: 'border',
@@ -24,6 +25,12 @@ Ext.define('Gtd.MainView', {
 			xtype: 'panel',
 			html: '<p>Center region</p>'
 		}
-	]
+	],
+	
+	listeners: {
+		afterrender: function() {
+			Gtd.view.Login.checkAuth();
+		}
+	}
 
 });
