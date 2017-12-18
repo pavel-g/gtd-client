@@ -7,7 +7,7 @@ Ext.define('Gtd.MainView', {
 	extend: 'Ext.container.Viewport',
 	
 	requires: [
-		'Gtd.view.Task',
+		'Gtd.view.TaskList',
 		'Gtd.view.Login'
 	],
 
@@ -16,7 +16,7 @@ Ext.define('Gtd.MainView', {
 	items: [
 		{
 			region: 'west',
-			xtype: 'Gtd.view.Task',
+			xtype: 'Gtd.view.TaskList',
 			collapsible: true,
 			width: 200
 		},
@@ -26,5 +26,5 @@ Ext.define('Gtd.MainView', {
 			html: '<p>Center region</p>'
 		}
 	],
-
+	
 });
