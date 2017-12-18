@@ -26,11 +26,5 @@ Ext.define('Gtd.MainView', {
 			html: '<p>Center region</p>'
 		}
 	],
-	
-	listeners: {
-		afterrender: function() {
-			Gtd.view.Login.checkAuth();
-		}
-	}
 
 });

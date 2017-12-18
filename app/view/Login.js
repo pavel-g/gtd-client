@@ -6,31 +6,6 @@ Ext.define('Gtd.view.Login', {
 
 	extend: 'Ext.window.Window',
 	
-	statics: {
-		
-		login: function() {
-			return new Ext.Promise(function(resolve, reject) {
-				var win = Ext.create('Gtd.view.Login');
-				win.on('done', resolve, win, {single: true});
-				win.on('failure', reject, win, {single: true});
-				win.show();
-			});
-		},
-		
-		checkAuth: function() {
-			return Gtd.core.Ajax.json({
-				url: Gtd.core.Constants.API_URL_PREFIX + '/auth/login',
-				method: 'GET'
-			}).then(function(resp) {
-				if (resp && resp.success) {
-					return true;
-				}
-				return Gtd.view.Login.login();
-			});
-		}
-		
-	},
-	
 	title: 'Вход',
 
 	modal: true,
@@ -41,6 +16,10 @@ Ext.define('Gtd.view.Login', {
 	
 	layout: 'form',
 	
+	/**
+	 * @method
+	 * @return {Ext.form.field.Text}
+	 */
 	getUsernameField: function() {
 		if (!this.usernameField) {
 			this.usernameField = Ext.create('Ext.form.field.Text', {
@@ -50,6 +29,10 @@ Ext.define('Gtd.view.Login', {
 		return this.usernameField;
 	},
 	
+	/**
+	 * @method
+	 * @return {Ext.form.field.Text}
+	 */
 	getPasswordField: function() {
 		if (!this.passwordField) {
 			this.passwordField = Ext.create('Ext.form.field.Text', {
@@ -60,6 +43,10 @@ Ext.define('Gtd.view.Login', {
 		return this.passwordField;
 	},
 	
+	/**
+	 * @method
+	 * @return {Ext.button.Button}
+	 */
 	getLoginButton: function() {
 		if (!this.loginButton) {
 			var me = this;
@@ -91,6 +78,10 @@ Ext.define('Gtd.view.Login', {
 		return this.loginButton;
 	},
 	
+	/**
+	 * @method
+	 * @protected
+	 */
 	initComponent: function() {
 		this.buttons = [
 			this.getLoginButton()
