@@ -1,12 +1,12 @@
 /**
- * @class Gtd.view.Task
+ * @class Gtd.view.TaskList
  * @extends Ext.grid.Panel
  */
-Ext.define('Gtd.view.Task', {
+Ext.define('Gtd.view.TaskList', {
 
 	extend: 'Ext.grid.Panel',
 	
-	alias: 'widget.Gtd.view.Task',
+	alias: 'widget.Gtd.view.TaskList',
 	
 	title: 'Список задач'
 
