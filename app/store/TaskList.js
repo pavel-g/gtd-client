@@ -11,5 +11,7 @@ Ext.define('Gtd.store.TaskList', {
 	],
 
 	alias: 'store.Gtd.store.TaskList',
+	
+	model: 'Gtd.model.TaskList',
 
 });
