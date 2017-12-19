@@ -1,5 +1,8 @@
 Ext.onReady(function() {
-	Ext.Loader.disableCaching = true;
+	Ext.Loader.setConfig({
+		enabled: true,
+		disableCaching: false
+	});
 	Ext.Loader.setPath('Gtd', 'app');
 	Ext.require(
 		[
