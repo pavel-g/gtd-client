@@ -12,8 +12,6 @@ Ext.define('Gtd.view.TaskList', {
 	
 	alias: 'widget.Gtd.view.TaskList',
 	
-	// store: 'Gtd.store.TaskList',
-	
 	title: 'Список задач',
 	
 	columns: [

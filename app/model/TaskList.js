@@ -21,6 +21,12 @@ Ext.define('Gtd.model.TaskList', {
 		actionMethods: {
 			create: 'POST',
 			destroy: 'POST'
+		},
+		reader: {
+			type: 'json',
+			rootProperty: 'data',
+			successProperty: 'success',
+			messageProperty: 'message'
 		}
 	}
 
