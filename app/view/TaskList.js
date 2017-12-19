@@ -20,23 +20,14 @@ Ext.define('Gtd.view.TaskList', {
 		{text: 'Название', dataIndex: 'title', flex: 1}
 	],
 	
-	listeners: {
-		afterrender: function(me) {
-			me.initListeners();
-		}
-	},
-	
 	initComponent: function() {
 		this.store = Ext.create('Gtd.store.TaskList');
 		this.callParent();
-	},
-	
-	/**
-	 * @method
-	 * @protected
-	 */
-	initListeners: function() {
-		Gtd.core.AuthManager.on('login', this.onLogin, this);
+		var AuthManager = Gtd.core.AuthManager;
+		AuthManager.on('login', this.onLogin, this);
+		if (AuthManager.isAuth()) {
+			this.onLogin();
+		}
 	},
 	
 	/**
@@ -44,7 +35,6 @@ Ext.define('Gtd.view.TaskList', {
 	 * @protected
 	 */
 	onLogin: function() {
-		debugger;
 		this.getStore().load();
 	},
 	
