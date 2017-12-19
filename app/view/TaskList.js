@@ -23,6 +23,11 @@ Ext.define('Gtd.view.TaskList', {
 		this.tbar = [
 			{
 				xtype: 'button',
+				iconCls: 'fa fa-file-alt',
+				handler: this.onNewButtonClick.bind(this)
+			},
+			{
+				xtype: 'button',
 				iconCls: 'fa fa-trash',
 				handler: this.onRemoveButtonClick.bind(this)
 			}
@@ -57,6 +62,22 @@ Ext.define('Gtd.view.TaskList', {
 			var item = items[i];
 			store.remove(item);
 		}
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 */
+	onNewButtonClick: function() {
+		var me = this;
+		Ext.Msg.prompt('Новый список', 'Название списка задач:', function(btn, text){
+			if (btn != 'ok'){
+				return;
+			}
+			var store = me.getStore();
+			var item = Ext.create('Gtd.model.TaskList', {title: text});
+			store.add(item);
+		});
 	},
 	
 });
