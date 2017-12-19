@@ -20,6 +20,13 @@ Ext.define('Gtd.view.TaskList', {
 	
 	initComponent: function() {
 		this.store = Ext.create('Gtd.store.TaskList');
+		this.tbar = [
+			{
+				xtype: 'button',
+				iconCls: 'fa fa-trash',
+				handler: this.onRemoveButtonClick.bind(this)
+			}
+		];
 		this.callParent();
 		var AuthManager = Gtd.core.AuthManager;
 		AuthManager.on('login', this.onLogin, this);
@@ -34,6 +41,22 @@ Ext.define('Gtd.view.TaskList', {
 	 */
 	onLogin: function() {
 		this.getStore().load();
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 */
+	onRemoveButtonClick: function() {
+		var store = this.getStore();
+		var items = this.getSelection();
+		if (!items || items.length === 0) {
+			return;
+		}
+		for (var i = 0; i < items.length; i++) {
+			var item = items[i];
+			store.remove(item);
+		}
 	},
 	
 });

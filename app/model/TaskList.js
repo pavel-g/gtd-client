@@ -11,6 +11,8 @@ Ext.define('Gtd.model.TaskList', {
 		{name: 'title', type: 'string'}
 	],
 	
+	idProperty: 'id',
+	
 	proxy: {
 		type: 'ajax',
 		url: Gtd.core.Constants.API_URL_PREFIX + '/list/all',
