@@ -64,13 +64,13 @@ Ext.define('Gtd.view.Login', {
 						}
 					}).then(function(resp) {
 						if (resp && resp.success) {
+							me.fireEvent('done', me, true);
 							me.close();
-							me.fireEvent('done', true);
 							return;
 						}
-						me.fireEvent('done', false);
+						me.fireEvent('done', me, false);
 					}).catch(function(ex) {
-						me.fireEvent('failure', ex);
+						me.fireEvent('failure', me, ex);
 					});
 				}
 			})
