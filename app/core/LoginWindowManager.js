@@ -22,9 +22,6 @@ Ext.define('Gtd.core.LoginWindowManager', {
 	init: function() {
 		var AuthManager = Gtd.core.AuthManager;
 		AuthManager.on('statuschange', this.onStatusChange, this);
-		if (!AuthManager.isAuth()) {
-			this.show();
-		}
 	},
 	
 	/**
