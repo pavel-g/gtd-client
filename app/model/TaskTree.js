@@ -3,7 +3,7 @@ Ext.define('Gtd.model.TaskTree', {
 	extend: 'Ext.data.TreeModel',
 	
 	fields: [
-		{name: 'id', type: 'int'},
+		{name: 'id'},
 		// {name: 'list_id', type: 'int', }
 		{name: 'title', type: 'string'},
 		{name: 'description', type: 'string', allowNull: true},
@@ -14,6 +14,10 @@ Ext.define('Gtd.model.TaskTree', {
 	],
 	
 	idProperty: 'id',
+	
+	identifier: {
+		type: 'sequential'
+	},
 	
 	proxy: {
 		type: 'ajax',
