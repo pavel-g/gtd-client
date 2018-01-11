@@ -21,9 +21,9 @@ Ext.define('Gtd.model.TaskTree', {
 	
 	proxy: {
 		type: 'ajax',
-		url: Gtd.core.Constants.API_URL_PREFIX + '/list/full',
+		url: Gtd.core.Constants.API_URL_PREFIX + '/tree/full',
 		api: {
-			create: Gtd.core.Constants.API_URL_PREFIX + '/list/create'
+			create: Gtd.core.Constants.API_URL_PREFIX + '/tree/create'
 		},
 		actionMethods: {
 			create: 'POST'
