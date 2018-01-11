@@ -12,6 +12,10 @@ Ext.define('Gtd.view.TaskTree', {
 	
 	rootVisible: false,
 	
+	columns: [
+		{text: 'Название', dataIndex: 'title', xtype: 'treecolumn', flex: 1}
+	],
+	
 	initComponent: function() {
 		this.store = Ext.create('Gtd.store.TaskTree');
 		this.callParent();
