@@ -8,12 +8,10 @@ Ext.define('Gtd.store.TaskTree', {
 	
 	alias: 'store.Gtd.store.TaskTree',
 	
-	model: 'Gtd.store.TaskTree',
+	model: 'Gtd.model.TaskTree',
 	
 	autoSync: true,
 	
 	autoLoad: false,
-	
-	rootVisible: false,
 	
 });
