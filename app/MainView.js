@@ -8,7 +8,8 @@ Ext.define('Gtd.MainView', {
 	
 	requires: [
 		'Gtd.view.TaskList',
-		'Gtd.view.Login'
+		'Gtd.view.Login',
+		'Gtd.view.TaskTree'
 	],
 
 	layout: 'border',
@@ -22,8 +23,7 @@ Ext.define('Gtd.MainView', {
 		},
 		{
 			region: 'center',
-			xtype: 'panel',
-			html: '<p>Center region</p>'
+			xtype: 'Gtd.view.TaskTree'
 		}
 	],
 	
