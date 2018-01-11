@@ -14,4 +14,10 @@ Ext.define('Gtd.store.TaskTree', {
 	
 	autoLoad: false,
 	
+	defaultRootProperty: 'children',
+	
+	root: {
+		expanded: true
+	}
+	
 });
