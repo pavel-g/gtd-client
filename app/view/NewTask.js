@@ -23,6 +23,8 @@ Ext.define('Gtd.view.NewTask', {
 	
 	bodyPadding: 5,
 	
+	closable: false,
+	
 	getData: function() {
 		var titleField = this.getTitleField();
 		var descriptionField = this.getDescriptionField();
@@ -98,10 +100,12 @@ Ext.define('Gtd.view.NewTask', {
 	
 	onOkButtonClick: function() {
 		this.fireEvent('okclick', this.getData());
+		this.close();
 	},
 	
 	onCancelButtonClick: function() {
 		this.fireEvent('cancelclick');
+		this.close();
 	},
 	
 	/**
