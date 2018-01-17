@@ -12,9 +12,16 @@ Ext.define('Gtd.view.NewTask', {
 	
 	width: 400,
 	
-	height: 300,
+	height: 400,
 	
-	layout: 'anchor',
+	layout: 'vbox',
+	
+	defaults: {
+		labelAlign: 'top',
+		width: '100%'
+	},
+	
+	bodyPadding: 5,
 	
 	getTitleField: function() {
 		if (!this.titleField) {
@@ -29,7 +36,7 @@ Ext.define('Gtd.view.NewTask', {
 		if (!this.descriptionField) {
 			this.descriptionField = Ext.create('Ext.form.field.TextArea', {
 				fieldLabel: 'Описание',
-				height: 150
+				flex: 1
 			});
 		}
 		return this.descriptionField;
