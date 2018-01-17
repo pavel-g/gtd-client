@@ -23,6 +23,17 @@ Ext.define('Gtd.view.NewTask', {
 	
 	bodyPadding: 5,
 	
+	getData: function() {
+		var titleField = this.getTitleField();
+		var descriptionField = this.getDescriptionField();
+		var dueDateField = this.getDueDateField();
+		return {
+			title: titleField.getValue(),
+			description: descriptionField.getValue(),
+			due: dueDateField.getValue()
+		};
+	},
+	
 	getTitleField: function() {
 		if (!this.titleField) {
 			this.titleField = Ext.create('Ext.form.field.Text', {
@@ -55,7 +66,8 @@ Ext.define('Gtd.view.NewTask', {
 	getCancelButton: function() {
 		if (!this.cancelButton) {
 			this.cancelButton = Ext.create('Ext.button.Button', {
-				text: 'Отмена'
+				text: 'Отмена',
+				handler: this.onCancelButtonClick.bind(this)
 			});
 		}
 		return this.cancelButton;
@@ -64,7 +76,8 @@ Ext.define('Gtd.view.NewTask', {
 	getOkButton: function() {
 		if (!this.okButton) {
 			this.okButton = Ext.create('Ext.button.Button', {
-				text: 'ОК'
+				text: 'ОК',
+				handler: this.onOkButtonClick.bind(this)
 			});
 		}
 		return this.okButton;
@@ -82,5 +95,25 @@ Ext.define('Gtd.view.NewTask', {
 		];
 		this.callParent();
 	},
+	
+	onOkButtonClick: function() {
+		this.fireEvent('okclick', this.getData());
+	},
+	
+	onCancelButtonClick: function() {
+		this.fireEvent('cancelclick');
+	},
+	
+	/**
+	 * @event okclick
+	 * @param {Object} data
+	 * @param {String} data.title
+	 * @param {String} data.description
+	 * @param {Date/String} data.due
+	 */
+	
+	/**
+	 * @event cancelclick
+	 */
 	
 });
