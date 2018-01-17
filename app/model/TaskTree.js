@@ -3,7 +3,7 @@ Ext.define('Gtd.model.TaskTree', {
 	extend: 'Ext.data.TreeModel',
 	
 	fields: [
-		{name: 'id'},
+		{name: 'id', allowNull: true},
 		// {name: 'list_id', type: 'int', }
 		{name: 'title', type: 'string'},
 		{name: 'description', type: 'string', allowNull: true},

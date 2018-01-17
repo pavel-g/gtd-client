@@ -50,6 +50,13 @@ Ext.define('Gtd.view.TaskTree', {
 	onAddButtonClick: function() {
 		var win = Ext.create('Gtd.view.NewTask');
 		win.show();
+		win.on('okclick', function(data) {
+			var store = this.getStore();
+			var task = Ext.create('Gtd.model.TaskTree', data);
+			task.set('id', null);
+			store.add(task);
+			task.save();
+		}, this, {single: true});
 	},
 	
 });
