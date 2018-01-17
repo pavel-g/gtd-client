@@ -54,6 +54,7 @@ Ext.define('Gtd.view.TaskTree', {
 			var store = this.getStore();
 			var task = Ext.create('Gtd.model.TaskTree', data);
 			task.set('id', null);
+			task.parentNode = store.getRoot();
 			store.add(task);
 			task.save();
 		}, this, {single: true});
