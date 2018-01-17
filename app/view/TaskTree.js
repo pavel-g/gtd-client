@@ -18,6 +18,14 @@ Ext.define('Gtd.view.TaskTree', {
 	
 	initComponent: function() {
 		this.store = Ext.create('Gtd.store.TaskTree');
+		this.tbar = [
+			{
+				xtype: 'button',
+				iconCls: 'fa fa-plus-square',
+				text: 'Добавить новую задачу',
+				handler: this.onAddButtonClick.bind(this)
+			}
+		];
 		this.callParent();
 	},
 	
@@ -36,6 +44,10 @@ Ext.define('Gtd.view.TaskTree', {
 		} else {
 			return null;
 		}
+	},
+	
+	onAddButtonClick: function() {
+		// TODO: code for onAddButtonClick
 	},
 	
 });
