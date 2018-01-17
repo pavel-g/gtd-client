@@ -4,6 +4,7 @@ Ext.define('Gtd.view.TaskTree', {
 	
 	requires: [
 		'Gtd.store.TaskTree',
+		'Gtd.view.NewTask'
 	],
 	
 	alias: 'widget.Gtd.view.TaskTree',
@@ -47,7 +48,8 @@ Ext.define('Gtd.view.TaskTree', {
 	},
 	
 	onAddButtonClick: function() {
-		// TODO: code for onAddButtonClick
+		var win = Ext.create('Gtd.view.NewTask');
+		win.show();
 	},
 	
 });
