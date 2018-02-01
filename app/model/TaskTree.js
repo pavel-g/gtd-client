@@ -10,7 +10,14 @@ Ext.define('Gtd.model.TaskTree', {
 		{name: 'created', type: 'date', allowNull: true},
 		{name: 'due', type: 'date', allowNull: true},
 		{name: 'removed', type: 'date', allowNull: true},
-		{name: 'completed', type: 'date', allowNull: true}
+		{name: 'completed', type: 'date', allowNull: true},
+		{
+			name: 'checked',
+			type: 'boolean',
+			calculate: function(data) {
+				return Boolean(data.completed);
+			}
+		}
 	],
 	
 	idProperty: 'id',
