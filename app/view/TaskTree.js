@@ -28,6 +28,7 @@ Ext.define('Gtd.view.TaskTree', {
 			}
 		];
 		this.callParent();
+		this.on('checkchange', this.onCheckChange, this);
 	},
 	
 	setListId: function(listId) {
@@ -58,6 +59,15 @@ Ext.define('Gtd.view.TaskTree', {
 			store.add(task);
 			task.save();
 		}, this, {single: true});
+	},
+	
+	onCheckChange: function(node, checked) {
+		if (checked) {
+			var date = new Date();
+		} else {
+			date = null;
+		}
+		node.set('completed', date);
 	},
 	
 });
