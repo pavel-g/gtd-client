@@ -5,6 +5,10 @@
 Ext.define('Gtd.view.NewTask', {
 	
 	extend: 'Ext.window.Window',
+
+	requires: [
+		'Gtd.view.fields.ParentTask'
+	],
 	
 	title: 'Добавление задачи',
 	
@@ -84,11 +88,21 @@ Ext.define('Gtd.view.NewTask', {
 		}
 		return this.okButton;
 	},
+
+	getParentTaskField: function () {
+		if (!this.parentTaskField) {
+			this.parentTaskField = Ext.create('Gtd.view.fields.ParentTask', {
+				fieldLabel: 'Родительская задача'
+			});
+		}
+		return this.parentTaskField;
+	},
 	
 	initComponent: function() {
 		this.items = [
 			this.getTitleField(),
 			this.getDescriptionField(),
+			this.getParentTaskField(),
 			this.getDueDateField()
 		];
 		this.buttons = [
