@@ -48,7 +48,11 @@ Ext.define('Gtd.view.TaskTree', {
 	getListId: function() {
 		return this.getStore().getListId();
 	},
-	
+
+	/**
+	 * @method
+	 * @protected
+	 */
 	onAddButtonClick: function() {
 		var win = Ext.create('Gtd.view.NewTask');
 		win.show();
@@ -61,7 +65,13 @@ Ext.define('Gtd.view.TaskTree', {
 			task.save();
 		}, this, {single: true});
 	},
-	
+
+	/**
+	 * @method
+	 * @protected
+	 * @param {Gtd.model.TaskTree/Ext.data.TreeModel} node
+	 * @param {Boolean} checked
+	 */
 	onCheckChange: function(node, checked) {
 		if (checked) {
 			var date = new Date();
