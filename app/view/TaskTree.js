@@ -31,21 +31,22 @@ Ext.define('Gtd.view.TaskTree', {
 		this.on('checkchange', this.onCheckChange, this);
 	},
 	
+	/**
+	 * @method
+	 * @param {Number/null} listId
+	 */
 	setListId: function(listId) {
 		var store = this.getStore();
-		store.listId = listId;
-		var proxy = store.getProxy();
-		proxy.setExtraParam('list_id', listId);
+		store.setListId(listId);
 		store.load();
 	},
 	
+	/**
+	 * @method
+	 * @return {Number/null}
+	 */
 	getListId: function() {
-		var store = this.getStore();
-		if (typeof store.listId !== 'undefined') {
-			return store.listId;
-		} else {
-			return null;
-		}
+		return this.getStore().getListId();
 	},
 	
 	onAddButtonClick: function() {
