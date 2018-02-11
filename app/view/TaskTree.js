@@ -84,8 +84,6 @@ Ext.define('Gtd.view.TaskTree', {
 			var store = this.getStore();
 			var task = Ext.create('Gtd.model.TaskTree', data);
 			task.set('id', null);
-			task.set('parent_id', data.parent_id);
-			var taskPath = task.getPath('id', '/');
 			task.save({
 				callback: function(record, operation, success) {
 					if (!success) {
