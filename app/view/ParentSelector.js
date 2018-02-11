@@ -48,7 +48,8 @@ Ext.define('Gtd.view.ParentSelector', {
 	getSearchButton: function() {
 		if (!this.searchButton) {
 			this.searchButton = Ext.create('Ext.button.Button', {
-				text: 'Найти'
+				text: 'Найти',
+				handler: this.onSearchButtonClick.bind(this)
 			});
 		}
 		return this.searchButton;
@@ -146,6 +147,14 @@ Ext.define('Gtd.view.ParentSelector', {
 	 * @method
 	 * @protected
 	 */
+	search: function(query) {
+		// TODO: code for search
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 */
 	initComponent: function() {
 		this.tbar = [
 			this.getSearchField(),
@@ -159,6 +168,16 @@ Ext.define('Gtd.view.ParentSelector', {
 			this.getCancelButton()
 		];
 		this.callParent();
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 */
+	onSearchButtonClick: function() {
+		var field = this.getSearchField();
+		var query = field.getValue();
+		this.search(query);
 	},
 
 });
