@@ -70,6 +70,7 @@ Ext.define('Gtd.view.TaskTree', {
 	 * @protected
 	 */
 	onAddButtonClick: function() {
+		var me = this;
 		var win = Ext.create('Gtd.view.TaskEditor');
 		var parentTask = this.getSelectedTask();
 		win.setData({
@@ -80,27 +81,26 @@ Ext.define('Gtd.view.TaskTree', {
 		});
 		win.show();
 		win.on('okclick', function(data) {
-			var parentId = data.parent_id;
 			var store = this.getStore();
-			if (parentId === null) {
-				var parentNode = store.getRoot();
-			} else {
-				parentNode = store.findTaskById(parentId);
-				if (parentNode === null) {
-					parentNode = store.getRoot();
-				}
-			}
-			data.leaf = true;
 			var task = Ext.create('Gtd.model.TaskTree', data);
 			task.set('id', null);
-			task.set('parent_id', parentNode.get('id'));
-			task.parentNode = parentNode;
+			task.set('parent_id', data.parent_id);
 			var taskPath = task.getPath('id', '/');
-			task.save();
-			store.on('load', function() {
-				this.expandPath(taskPath, {field: 'id', separator: '/', select: true});
-			}, this, {signle: true});
-			store.load();
+			task.save({
+				callback: function(record, operation, success) {
+					if (!success) {
+						return;
+					}
+					store.on('load', function() {
+						this.expandPath('/root/' + record.getFullPath(), {
+							field: 'id',
+							separator: '/',
+							select: true
+						});
+					}, me, {single: true});
+					store.load();
+				}
+			});
 		}, this, {single: true});
 	},
 
