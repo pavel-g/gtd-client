@@ -31,7 +31,7 @@ Ext.define('Gtd.view.TaskEditor', {
 
 	/**
 	 * @method
-	 * @return {Object}
+	 * @return {Object} return
 	 * @return {String} return.title
 	 * @return {String} return.description
 	 * @return {Date/String} return.due
@@ -213,6 +213,7 @@ Ext.define('Gtd.view.TaskEditor', {
 	 * @param {String} data.title
 	 * @param {String} data.description
 	 * @param {Date/String} data.due
+	 * @param {Number/null} data.parent_id
 	 */
 	
 	/**

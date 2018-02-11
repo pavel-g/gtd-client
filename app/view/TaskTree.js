@@ -1,3 +1,7 @@
+/**
+ * @class Gtd.view.TaskTree
+ * @extends Ext.tree.Panel
+ */
 Ext.define('Gtd.view.TaskTree', {
 	
 	extend: 'Ext.tree.Panel',
@@ -73,15 +77,30 @@ Ext.define('Gtd.view.TaskTree', {
 			description: '',
 			due: null,
 			parent_task: parentTask
-		}); 
+		});
 		win.show();
 		win.on('okclick', function(data) {
+			var parentId = data.parent_id;
 			var store = this.getStore();
+			if (parentId === null) {
+				var parentNode = store.getRoot();
+			} else {
+				parentNode = store.findTaskById(parentId);
+				if (parentNode === null) {
+					parentNode = store.getRoot();
+				}
+			}
+			data.leaf = true;
 			var task = Ext.create('Gtd.model.TaskTree', data);
 			task.set('id', null);
-			task.parentNode = store.getRoot();
-			store.add(task);
+			task.set('parent_id', parentNode.get('id'));
+			task.parentNode = parentNode;
+			var taskPath = task.getPath('id', '/');
 			task.save();
+			store.on('load', function() {
+				this.expandPath(taskPath, {field: 'id', separator: '/', select: true});
+			}, this, {signle: true});
+			store.load();
 		}, this, {single: true});
 	},
 
