@@ -21,6 +21,8 @@ Ext.define('Gtd.view.ParentSelector', {
 
 	height: 400,
 	
+	layout: 'fit',
+	
 	/**
 	 * @property {Gtd.model.TaskTree/null} currentTask
 	 * @private
@@ -54,11 +56,28 @@ Ext.define('Gtd.view.ParentSelector', {
 	
 	/**
 	 * @method
+	 * @return {Gtd.store.TaskTree}
+	 */
+	getGridStore: function() {
+		if (!this.gridStore) {
+			this.gridStore = Ext.create('Gtd.store.TaskTree');
+		}
+		return this.gridStore;
+	},
+	
+	/**
+	 * @method
 	 * @return {Ext.grid.Panel}
 	 */
 	getGrid: function() {
 		if (!this.grid) {
-			this.grid = Ext.create('Ext.grid.Panel', {});
+			this.grid = Ext.create('Ext.tree.Panel', {
+				store: this.getGridStore(),
+				columns: [
+					{text: 'Название', dataIndex: 'title', xtype: 'treecolumn', flex: 1}
+				],
+				rootVisible: false,
+			});
 		}
 		return this.grid;
 	},
