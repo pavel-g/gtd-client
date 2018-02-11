@@ -1,3 +1,7 @@
+/**
+ * @class Gtd.store.TaskTree
+ * @extends Ext.data.TreeStore
+ */
 Ext.define('Gtd.store.TaskTree', {
 	
 	extend: 'Ext.data.TreeStore',
@@ -44,6 +48,20 @@ Ext.define('Gtd.store.TaskTree', {
 		} else {
 			return null;
 		}
+	},
+	
+	/**
+	 * @method
+	 * @param {Number} taskId
+	 * @return {Gtd.model.TaskTree/Ext.data.TreeModel/null}
+	 */
+	findTaskById: function(taskId) {
+		var index = this.findBy(function(record, id) {
+			if (taskId == id) {
+				return true;
+			}
+		});
+		return this.getAt(index);
 	},
 	
 });
