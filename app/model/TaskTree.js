@@ -11,6 +11,7 @@ Ext.define('Gtd.model.TaskTree', {
 		{name: 'due', type: 'date', allowNull: true},
 		{name: 'removed', type: 'date', allowNull: true},
 		{name: 'completed', type: 'date', allowNull: true},
+		{name: 'path', type: 'string', allowNull: true},
 		{
 			name: 'checked',
 			type: 'boolean',
@@ -41,6 +42,18 @@ Ext.define('Gtd.model.TaskTree', {
 			successProperty: 'success',
 			messageProperty: 'message'
 		}
-	}
+	},
+	
+	/**
+	 * @method
+	 * @return {String}
+	 */
+	getFullPath: function() {
+		var path = this.get('path');
+		if (Ext.isEmpty(path)) {
+			return this.get('id');
+		}
+		return path + '/' + this.get('id');
+	},
 	
 });
