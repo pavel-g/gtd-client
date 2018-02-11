@@ -1,8 +1,8 @@
 /**
- * @class Gtd.view.NewTask
+ * @class Gtd.view.TaskEditor
  * @extends Ext.window.Window
  */
-Ext.define('Gtd.view.NewTask', {
+Ext.define('Gtd.view.TaskEditor', {
 	
 	extend: 'Ext.window.Window',
 
