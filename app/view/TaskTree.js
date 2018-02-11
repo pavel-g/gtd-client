@@ -48,6 +48,18 @@ Ext.define('Gtd.view.TaskTree', {
 	getListId: function() {
 		return this.getStore().getListId();
 	},
+	
+	/**
+	 * @method
+	 * @return {Gtd.model.TaskTree/Ext.data.TreeModel/null}
+	 */
+	getSelectedTask: function() {
+		var sel = this.getSelection();
+		if (sel && sel.length > 0) {
+			return sel[0];
+		}
+		return null;
+	},
 
 	/**
 	 * @method
@@ -55,6 +67,13 @@ Ext.define('Gtd.view.TaskTree', {
 	 */
 	onAddButtonClick: function() {
 		var win = Ext.create('Gtd.view.TaskEditor');
+		var parentTask = this.getSelectedTask();
+		win.setData({
+			title: '',
+			description: '',
+			due: null,
+			parent_task: parentTask
+		}); 
 		win.show();
 		win.on('okclick', function(data) {
 			var store = this.getStore();
