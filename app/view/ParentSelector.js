@@ -7,6 +7,11 @@
 Ext.define('Gtd.view.ParentSelector', {
 
 	extend: 'Ext.window.Window',
+	
+	requires: [
+		'Gtd.store.TaskTree',
+		'Gtd.model.TaskTree',
+	],
 
 	title: 'Выбор родительской задачи',
 
@@ -15,6 +20,11 @@ Ext.define('Gtd.view.ParentSelector', {
 	width: 400,
 
 	height: 400,
+	
+	/**
+	 * @property {Gtd.model.TaskTree/null} currentTask
+	 * @private
+	 */
 	
 	/**
 	 * @method
@@ -77,6 +87,22 @@ Ext.define('Gtd.view.ParentSelector', {
 			});
 		}
 		return this.cancelButton;
+	},
+	
+	/**
+	 * @method
+	 * @param {Gtd.model.TaskTree/null} task
+	 */
+	setCurrentTask: function(task) {
+		this.currentTask = task;
+	},
+	
+	/**
+	 * @method
+	 * @return {Gtd.model.TaskTree/null}
+	 */
+	getCurrentTask: function() {
+		return this.currentTask || null;
 	},
 	
 	/**
