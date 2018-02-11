@@ -114,6 +114,7 @@ Ext.define('Gtd.view.ParentSelector', {
 	 */
 	setCurrentTask: function(task) {
 		this.currentTask = task;
+		this.updateFilter();
 	},
 	
 	/**
@@ -122,6 +123,23 @@ Ext.define('Gtd.view.ParentSelector', {
 	 */
 	getCurrentTask: function() {
 		return this.currentTask || null;
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 */
+	updateFilter: function() {
+		var store = this.getGridStore();
+		var currentTask = this.getCurrentTask();
+		if (currentTask) {
+			var currentTaskId = currentTask.get('id');
+			store.filterBy(function(record) { // Gtd.model.TaskTree/Ext.data.TreeModel
+				return Boolean(record.get('id') !== currentTaskId);
+			}, this);
+		} else {
+			store.clearFilter();
+		}
 	},
 	
 	/**
