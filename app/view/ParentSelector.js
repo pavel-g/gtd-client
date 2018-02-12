@@ -11,6 +11,7 @@ Ext.define('Gtd.view.ParentSelector', {
 	requires: [
 		'Gtd.store.TaskTree',
 		'Gtd.model.TaskTree',
+		'Gtd.core.Ajax'
 	],
 
 	title: 'Выбор родительской задачи',
@@ -25,6 +26,16 @@ Ext.define('Gtd.view.ParentSelector', {
 	
 	/**
 	 * @property {Gtd.model.TaskTree/null} currentTask
+	 * @private
+	 */
+	
+	/**
+	 * @property {String/null} searchQuery
+	 * @private
+	 */
+	
+	/**
+	 * @property {Object[]/null} searchResults
 	 * @private
 	 */
 	
@@ -146,9 +157,35 @@ Ext.define('Gtd.view.ParentSelector', {
 	/**
 	 * @method
 	 * @protected
+	 * @param {String/null} query
+	 * @return {Ext.Promise}
+	 * @return {Object[]/null} return.resolve - результаты поиска
 	 */
 	search: function(query) {
-		// TODO: code for search
+		if (query === this.searchQuery) {
+			return Ext.Promise.resolve(this.searchResults);
+		}
+		if (Ext.isEmpty(query)) {
+			this.searchQuery = null;
+			this.searchResults = null;
+			return Ext.Promise.resolve(null);
+		}
+		var listId = this.getGrid().getStore().getListId();
+		var me = this;
+		return Gtd.core.Ajax.json({
+			url: Gtd.core.Constants.API_URL_PREFIX + '/tree/find',
+			params: {
+				list_id: listId,
+				title: query
+			}
+		}).then(function(data) {
+			if (!data || !data.success) {
+				return;
+			}
+			me.searchQuery = query;
+			me.searchResults = data.data;
+			return me.searchResults;
+		});
 	},
 	
 	/**
