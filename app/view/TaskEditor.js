@@ -28,6 +28,27 @@ Ext.define('Gtd.view.TaskEditor', {
 	bodyPadding: 5,
 	
 	closable: false,
+	
+	/**
+	 * @cfg {Number} listId (required)
+	 */
+	
+	/**
+	 * @property {Number} listId
+	 * @readonly
+	 */
+	
+	/**
+	 * @method
+	 * @param {Object} cfg
+	 */
+	constructor: function(cfg) {
+		Ext.apply(this, cfg);
+		if (typeof this.listId !== 'number') {
+			throw new Error('Undefined listId');
+		}
+		return this.callParent(arguments);
+	},
 
 	/**
 	 * @method
@@ -147,7 +168,8 @@ Ext.define('Gtd.view.TaskEditor', {
 	getParentTaskField: function () {
 		if (!this.parentTaskField) {
 			this.parentTaskField = Ext.create('Gtd.view.fields.ParentTask', {
-				fieldLabel: 'Родительская задача'
+				fieldLabel: 'Родительская задача',
+				listId: this.listId
 			});
 		}
 		return this.parentTaskField;
