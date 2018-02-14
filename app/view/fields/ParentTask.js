@@ -1,3 +1,7 @@
+/**
+ * @class Gtd.view.fields.ParentTask
+ * @extends Ext.form.FieldContainer
+ */
 Ext.define('Gtd.view.fields.ParentTask', {
 
 	extend: 'Ext.form.FieldContainer',
@@ -9,10 +13,31 @@ Ext.define('Gtd.view.fields.ParentTask', {
 	layout: 'hbox',
 	
 	/**
+	 * @cfg {Number} listId (required)
+	 */
+	
+	/**
+	 * @property {Number} listId
+	 * @readonly
+	 */
+	
+	/**
 	 * @property {Gtd.model.TaskTree/null} task
 	 * @private
 	 */
-
+	
+	/**
+	 * @method
+	 * @param {Object} cfg
+	 */
+	constructor: function(cfg) {
+		Ext.apply(this, cfg);
+		if (typeof this.listId !== 'number') {
+			throw new Error('Undefined listId');
+		}
+		return this.callParent(arguments);
+	},
+	
 	initComponent: function () {
 		this.items = [
 			this.getField(),
@@ -92,7 +117,9 @@ Ext.define('Gtd.view.fields.ParentTask', {
 	 * @protected
 	 */
 	onSelectButtonClick: function () {
-		var win = Ext.create('Gtd.view.ParentSelector');
+		var win = Ext.create('Gtd.view.ParentSelector', {
+			listId: this.listId
+		});
 		win.show();
 	},
 
