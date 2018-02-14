@@ -25,6 +25,15 @@ Ext.define('Gtd.view.ParentSelector', {
 	layout: 'fit',
 	
 	/**
+	 * @cfg {Number} listId (required)
+	 */
+	
+	/**
+	 * @property {Number} listId
+	 * @readonly
+	 */
+	
+	/**
 	 * @property {Gtd.model.TaskTree/null} currentTask
 	 * @private
 	 */
@@ -35,9 +44,21 @@ Ext.define('Gtd.view.ParentSelector', {
 	 */
 	
 	/**
-	 * @property {Object[]/null} searchResults
+	 * @property {String[]/null} searchResults
 	 * @private
 	 */
+	
+	/**
+	 * @method
+	 * @param {Object} cfg
+	 */
+	constructor: function(cfg) {
+		Ext.apply(this, cfg);
+		if (typeof this.listId !== 'number') {
+			throw new Error('Undefined listId');
+		}
+		return this.callParent(arguments);
+	},
 	
 	/**
 	 * @method
@@ -73,6 +94,7 @@ Ext.define('Gtd.view.ParentSelector', {
 	getGridStore: function() {
 		if (!this.gridStore) {
 			this.gridStore = Ext.create('Gtd.store.TaskTree');
+			this.gridStore.setListId(this.listId);
 		}
 		return this.gridStore;
 	},
@@ -170,22 +192,43 @@ Ext.define('Gtd.view.ParentSelector', {
 			this.searchResults = null;
 			return Ext.Promise.resolve(null);
 		}
-		var listId = this.getGrid().getStore().getListId();
 		var me = this;
 		return Gtd.core.Ajax.json({
 			url: Gtd.core.Constants.API_URL_PREFIX + '/tree/find',
 			params: {
-				list_id: listId,
+				list_id: this.listId,
 				title: query
-			}
+			},
+			method: 'GET'
 		}).then(function(data) {
 			if (!data || !data.success) {
 				return;
 			}
 			me.searchQuery = query;
-			me.searchResults = data.data;
-			return me.searchResults;
-		});
+			me.searchResults = Ext.Array.map(data.data, function(item) {
+				return Ext.create('Gtd.model.TaskTree', item).getFullPath();
+			});
+			return me.expandSearchResults();
+		}).then(function() {});
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 * @return {Ext.Promise}
+	 */
+	expandSearchResults: function() {
+		var results = this.searchResults;
+		var grid = this.getGrid();
+		var promises = [];
+		for (var i = 0; i < results.length; i++) {
+			var path = results[i];
+			var promise = new Ext.Promise(function(resolve) {
+				return grid.expandPath(path, {field: 'id', separator: '/', callback: resolve});
+			});
+			promises.push(promise);
+		}
+		return Ext.Promise.all(promises);
 	},
 	
 	/**
