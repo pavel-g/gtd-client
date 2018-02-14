@@ -71,7 +71,9 @@ Ext.define('Gtd.view.TaskTree', {
 	 */
 	onAddButtonClick: function() {
 		var me = this;
-		var win = Ext.create('Gtd.view.TaskEditor');
+		var win = Ext.create('Gtd.view.TaskEditor', {
+			listId: this.getListId()
+		});
 		var parentTask = this.getSelectedTask();
 		win.setData({
 			title: '',

@@ -1,3 +1,7 @@
+/**
+ * @class Gtd.model.TaskTree
+ * @extends Ext.data.TreeModel
+ */
 Ext.define('Gtd.model.TaskTree', {
 	
 	extend: 'Ext.data.TreeModel',
