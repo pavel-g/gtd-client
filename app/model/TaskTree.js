@@ -54,10 +54,11 @@ Ext.define('Gtd.model.TaskTree', {
 	 */
 	getFullPath: function() {
 		var path = this.get('path');
+		var id = String(this.get('id'));
 		if (Ext.isEmpty(path)) {
-			return this.get('id');
+			return id;
 		}
-		return path + '/' + this.get('id');
+		return path + '/' + id;
 	},
 	
 });

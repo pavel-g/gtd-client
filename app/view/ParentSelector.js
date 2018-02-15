@@ -162,26 +162,88 @@ Ext.define('Gtd.view.ParentSelector', {
 	/**
 	 * @method
 	 * @protected
+	 * 
+	 * Union filters from createFilterExcludeCurrentTask and createFilterShowOnlySearchResults methods
+	 * 
+	 * @return {Ext.Promise}
 	 */
 	updateFilter: function() {
-		var store = this.getGridStore();
+		var me = this;
+		return new Ext.Promise(function(resolve) {
+			var CLEAR_SILENT = true;
+			var store = me.getGridStore();
+			var filterExludeCurrentTask = me.createFilterExcludeCurrentTask();
+			var filterShowOnlySearchResults = me.createFilterShowOnlySearchResults();
+			if (!filterExludeCurrentTask && !filterShowOnlySearchResults) {
+				store.clearFilter();
+				resolve();
+			} else {
+				store.on('filterchange', resolve, me, {signle: true});
+				store.clearFilter(CLEAR_SILENT);
+				store.filterBy(function(record) {
+					return Boolean(
+						filterShowOnlySearchResults(record) &&
+						filterExludeCurrentTask(record)
+					);
+				});
+			}
+		});
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 * @return {Function}
+	 * @return {Gtd.model.TaskTree/Ext.data.TreeModel} return.record
+	 */
+	createFilterExcludeCurrentTask: function() {
 		var currentTask = this.getCurrentTask();
-		if (currentTask) {
-			var currentTaskId = currentTask.get('id');
-			store.filterBy(function(record) { // Gtd.model.TaskTree/Ext.data.TreeModel
-				return Boolean(record.get('id') !== currentTaskId);
-			}, this);
-		} else {
-			store.clearFilter();
+		if (!currentTask) {
+			return function() {
+				return true;
+			};
+		}
+		var currentTaskId = currentTask.get('id');
+		return function(record) {
+			return Boolean(record.get('id') !== currentTaskId);
+		};
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 * @return {Function}
+	 * @return {Gtd.model.TaskTree/Ext.data.TreeModel} return.record
+	 */
+	createFilterShowOnlySearchResults: function() {
+		var searchResults = this.searchResults;
+		if (!searchResults) {
+			return function() {
+				return true;
+			};
+		}
+		var ids = [];
+		for (var i = 0; i < searchResults.length; i++) {
+			var pathIds = searchResults[i].split('/');
+			if (pathIds && pathIds.length > 0) {
+				for (var j = 0; j < pathIds.length; j++) {
+					ids.push(Number(pathIds[j]))
+				}
+			}
+		}
+		return function(record) {
+			return Boolean(ids.indexOf(record.get('id')) >= 0);
 		}
 	},
 	
 	/**
 	 * @method
 	 * @protected
+	 * 
+	 * Search and processing of results
+	 * 
 	 * @param {String/null} query
 	 * @return {Ext.Promise}
-	 * @return {Object[]/null} return.resolve - результаты поиска
 	 */
 	search: function(query) {
 		if (query === this.searchQuery) {
@@ -190,8 +252,10 @@ Ext.define('Gtd.view.ParentSelector', {
 		if (Ext.isEmpty(query)) {
 			this.searchQuery = null;
 			this.searchResults = null;
-			return Ext.Promise.resolve(null);
+			this.scanSearchResults();
+			return this.updateFilter();
 		}
+		this.searchQuery = query;
 		var me = this;
 		return Gtd.core.Ajax.json({
 			url: Gtd.core.Constants.API_URL_PREFIX + '/tree/find',
@@ -200,16 +264,25 @@ Ext.define('Gtd.view.ParentSelector', {
 				title: query
 			},
 			method: 'GET'
-		}).then(function(data) {
-			if (!data || !data.success) {
-				return;
-			}
-			me.searchQuery = query;
-			me.searchResults = Ext.Array.map(data.data, function(item) {
-				return Ext.create('Gtd.model.TaskTree', item).getFullPath();
-			});
-			return me.expandSearchResults();
-		}).then(function() {});
+		})
+		.then(this.scanSearchResults.bind(this))
+		.then(this.updateFilter.bind(this))
+		.then(this.expandSearchResults.bind(this))
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 * @param {Object} data
+	 */
+	scanSearchResults: function(data) {
+		if (!data || !data.success) {
+			this.searchResults = null;
+			return;
+		}
+		this.searchResults = Ext.Array.map(data.data, function(item) {
+			return Ext.create('Gtd.model.TaskTree', item).getFullPath();
+		});
 	},
 	
 	/**
