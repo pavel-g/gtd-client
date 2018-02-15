@@ -120,6 +120,9 @@ Ext.define('Gtd.view.fields.ParentTask', {
 		var win = Ext.create('Gtd.view.ParentSelector', {
 			listId: this.listId
 		});
+		win.on('okclick', function(win, task) {
+			this.setTask(task);
+		}, this, {single: true});
 		win.show();
 	},
 

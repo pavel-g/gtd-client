@@ -24,6 +24,8 @@ Ext.define('Gtd.view.ParentSelector', {
 	
 	layout: 'fit',
 	
+	closable: false,
+	
 	/**
 	 * @cfg {Number} listId (required)
 	 */
@@ -118,15 +120,49 @@ Ext.define('Gtd.view.ParentSelector', {
 	
 	/**
 	 * @method
+	 * @return {Gtd.model.TaskTree/Ext.data.TreeModel/null}
+	 */
+	getSelectedTask: function() {
+		var grid = this.getGrid();
+		var selection = grid.getSelection();
+		if (!selection || selection.length <= 0) {
+			return null;
+		}
+		return selection[0];
+	},
+	
+	/**
+	 * @method
 	 * @return {Ext.button.Button}
 	 */
 	getOkButton: function() {
 		if (!this.okButton) {
 			this.okButton = Ext.create('Ext.button.Button', {
-				text: 'Ок'
+				text: 'Ок',
+				handler: this.onOkButtonClick.bind(this)
 			});
 		}
 		return this.okButton;
+	},
+	
+	/**
+	 * @event okclick
+	 * @param {Gtd.view.ParentSelector} win
+	 * @param {Gtd.model.TaskTree/Ext.data.TreeModel} task
+	 */
+	
+	/**
+	 * @method
+	 * @protected
+	 */
+	onOkButtonClick: function() {
+		var task = this.getSelectedTask();
+		if (!task) {
+			Ext.Msg.alert('Ошибка', 'Необходимо выборать какую-то родительскую задачу');
+			return;
+		}
+		this.fireEvent('okclick', this, task);
+		this.close();
 	},
 	
 	/**
@@ -136,10 +172,25 @@ Ext.define('Gtd.view.ParentSelector', {
 	getCancelButton: function() {
 		if (!this.cancelButton) {
 			this.cancelButton = Ext.create('Ext.button.Button', {
-				text: 'Отмена'
+				text: 'Отмена',
+				handler: this.onCancelButtonClick.bind(this)
 			});
 		}
 		return this.cancelButton;
+	},
+	
+	/**
+	 * @event cancelclick
+	 * @param {Gtd.view.ParentSelector} win
+	 */
+	
+	/**
+	 * @method
+	 * @protected
+	 */
+	onCancelButtonClick: function() {
+		this.fireEvent('cancelclick', this);
+		this.close();
 	},
 	
 	/**
