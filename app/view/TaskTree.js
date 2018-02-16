@@ -130,16 +130,14 @@ Ext.define('Gtd.view.TaskTree', {
 	 * @protected
 	 */
 	onEditButtonClick: function() {
+		var task = this.getSelectedTask(); // Gtd.model.TaskTree
+		if (!task) {
+			return;
+		}
 		var win = Ext.create('Gtd.view.TaskEditor', {
 			listId: this.getListId()
 		});
-		var task = this.getSelectedTask(); // Gtd.model.TaskTree
-		win.setData({
-			title: task.get('title'),
-			description: task.get('description'),
-			due: task.get('due'),
-			parent_task: task.parentNode
-		});
+		win.setTask(task);
 		win.show();
 		win.on('okclick', function(data) {
 			task.set('title', data.title);

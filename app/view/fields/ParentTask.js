@@ -120,10 +120,32 @@ Ext.define('Gtd.view.fields.ParentTask', {
 		var win = Ext.create('Gtd.view.ParentSelector', {
 			listId: this.listId
 		});
+		win.setCurrentTask(this.getExcludedTask());
 		win.on('okclick', function(win, task) {
 			this.setTask(task);
 		}, this, {single: true});
 		win.show();
+	},
+	
+	/**
+	 * @property {Gtd.model.TaskTree/Ext.data.TreeModel/null} excludedTask
+	 * @private
+	 */
+	
+	/**
+	 * @method
+	 * @param {Gtd.model.TaskTree/Ext.data.TreeModel/null} task
+	 */
+	setExcludedTask: function(task) {
+		this.excludedTask = task;
+	},
+	
+	/**
+	 * @method
+	 * @return {Gtd.model.TaskTree/Ext.data.TreeModel/null}
+	 */
+	getExcludedTask: function() {
+		return this.excludedTask || null;
 	},
 
 });

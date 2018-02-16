@@ -91,6 +91,27 @@ Ext.define('Gtd.view.TaskEditor', {
 		dueDateField.setValue(data.due);
 		this.setParentTask(data.parent_task);
 	},
+	
+	/**
+	 * @method
+	 * @param {Gtd.model.TaskTree/Ext.data.TreeModel} task
+	 */
+	setTask: function(task) {
+		var titleField = this.getTitleField();
+		var descriptionField = this.getDescriptionField();
+		var dueDateField = this.getDueDateField();
+		var parentTaskField = this.getParentTaskField();
+		titleField.setValue(task.get('title'));
+		descriptionField.setValue(task.get('description'));
+		dueDateField.setValue(task.get('due'));
+		var parentTask = task.parentNode;
+		if (!parentTask || parentTask.isRoot()) {
+			parentTask = null;
+		} else {
+			this.setParentTask(parentTask);
+		}
+		parentTaskField.setExcludedTask(task);
+	},
 
 	/**
 	 * @method
