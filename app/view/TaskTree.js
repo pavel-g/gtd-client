@@ -29,6 +29,12 @@ Ext.define('Gtd.view.TaskTree', {
 				iconCls: 'fa fa-plus-square',
 				text: 'Добавить новую задачу',
 				handler: this.onAddButtonClick.bind(this)
+			},
+			{
+				xtype: 'button',
+				iconCls: 'fa fa-edit',
+				text: 'Редактировать',
+				handler: this.onEditButtonClick.bind(this)
 			}
 		];
 		this.callParent();
@@ -117,6 +123,47 @@ Ext.define('Gtd.view.TaskTree', {
 			date = null;
 		}
 		node.set('completed', date);
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 */
+	onEditButtonClick: function() {
+		var win = Ext.create('Gtd.view.TaskEditor', {
+			listId: this.getListId()
+		});
+		var task = this.getSelectedTask(); // Gtd.model.TaskTree
+		win.setData({
+			title: task.get('title'),
+			description: task.get('description'),
+			due: task.get('due'),
+			parent_task: task.parentNode
+		});
+		win.show();
+		win.on('okclick', function(data) {
+			task.set('title', data.title);
+			task.set('description', data.description);
+			task.set('due', data.due);
+			task.set('parent_id', data.parent_id);
+			var me = this;
+			task.save({
+				callback: function(record, operation, success) {
+					if (!success) {
+						return;
+					}
+					var store = me.store;
+					store.on('load', function() {
+						this.expandPath('/root/' + record.getFullPath(), {
+							field: 'id',
+							separator: '/',
+							select: true
+						});
+					}, me, {single: true});
+					store.load();
+				}
+			})
+		}, this, {single: true});
 	},
 	
 });

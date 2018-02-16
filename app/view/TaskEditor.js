@@ -78,7 +78,7 @@ Ext.define('Gtd.view.TaskEditor', {
 	 * @param {String/null} data.title
 	 * @param {String/null} data.description
 	 * @param {String/Date/null} data.due
-	 * @param {Gtd.model.TaskTree/Ext.data.TreeModel} data.parent_task
+	 * @param {Gtd.model.TaskTree/Ext.data.TreeModel/null} data.parent_task
 	 */
 	setData: function (data) {
 		data = data || {};
