@@ -123,6 +123,23 @@ Ext.define('Gtd.view.TaskTree', {
 			date = null;
 		}
 		node.set('completed', date);
+		var me = this;
+		node.save({
+			callback: function(node, operation, success) {
+				if (!success) {
+					return;
+				}
+				var store = me.store;
+				store.on('load', function() {
+					this.expandPath('/root/' + node.getFullPath(), {
+						field: 'id',
+						separator: '/',
+						select: true
+					})
+				}, me, {single: true});
+				store.load();
+			}
+		});
 	},
 	
 	/**
