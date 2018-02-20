@@ -26,19 +26,22 @@ Ext.define('Gtd.view.TaskTree', {
 		this.tbar = [
 			{
 				xtype: 'button',
-				iconCls: 'fa fa-plus-square',
-				text: 'Добавить новую задачу',
+				icon: 'resources/icons/add.png',
+				scale: 'medium',
+				text: 'Новая задача',
 				handler: this.onAddButtonClick.bind(this)
 			},
 			{
 				xtype: 'button',
-				iconCls: 'fa fa-edit',
+				icon: 'resources/icons/edit.png',
+				scale: 'medium',
 				text: 'Редактировать',
 				handler: this.onEditButtonClick.bind(this)
 			},
 			{
 				xtype: 'button',
-				iconCls: 'fa fa-trash',
+				icon: 'resources/icons/delete.png',
+				scale: 'medium',
 				text: 'Удалить',
 				handler: this.onRemoveButtonClick.bind(this)
 			}

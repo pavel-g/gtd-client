@@ -23,12 +23,16 @@ Ext.define('Gtd.view.TaskList', {
 		this.tbar = [
 			{
 				xtype: 'button',
-				iconCls: 'fa fa-file-alt',
+				icon: 'resources/icons/add.png',
+				scale: 'medium',
+				text: 'Добавить',
 				handler: this.onNewButtonClick.bind(this)
 			},
 			{
 				xtype: 'button',
-				iconCls: 'fa fa-trash',
+				icon: 'resources/icons/delete.png',
+				scale: 'medium',
+				text: 'Удалить',
 				handler: this.onRemoveButtonClick.bind(this)
 			}
 		];
