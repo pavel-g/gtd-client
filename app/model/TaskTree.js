@@ -36,7 +36,8 @@ Ext.define('Gtd.model.TaskTree', {
 		url: Gtd.core.Constants.API_URL_PREFIX + '/tree/all',
 		api: {
 			create: Gtd.core.Constants.API_URL_PREFIX + '/tree/create',
-			update: Gtd.core.Constants.API_URL_PREFIX + '/tree/update'
+			update: Gtd.core.Constants.API_URL_PREFIX + '/tree/update',
+			destroy: Gtd.core.Constants.API_URL_PREFIX + '/tree/remove'
 		},
 		actionMethods: {
 			create: 'POST'

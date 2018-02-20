@@ -35,6 +35,12 @@ Ext.define('Gtd.view.TaskTree', {
 				iconCls: 'fa fa-edit',
 				text: 'Редактировать',
 				handler: this.onEditButtonClick.bind(this)
+			},
+			{
+				xtype: 'button',
+				iconCls: 'fa fa-trash',
+				text: 'Удалить',
+				handler: this.onRemoveButtonClick.bind(this)
 			}
 		];
 		this.callParent();
@@ -179,6 +185,37 @@ Ext.define('Gtd.view.TaskTree', {
 				}
 			})
 		}, this, {single: true});
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 */
+	onRemoveButtonClick: function() {
+		var task = this.getSelectedTask(); // Gtd.model.TaskTree
+		if (!task) {
+			return;
+		}
+		var parentPath = task.get('path');
+		var me = this;
+		task.erase({
+			callback: function(record, operation, success) {
+				if (!success) {
+					return;
+				}
+				var store = me.store;
+				store.on('load', function() {
+					if (Ext.isEmpty(parentPath)) {
+						return;
+					}
+					me.expandPath('/root/' + parentPath, {
+						field: 'id',
+						separator: '/'
+					});
+				}, me, {single: true});
+				store.load();
+			}
+		});
 	},
 	
 });
