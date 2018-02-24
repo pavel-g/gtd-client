@@ -64,4 +64,31 @@ Ext.define('Gtd.store.TaskTree', {
 		return this.getAt(index);
 	},
 	
+	/**
+	 * @method
+	 * 
+	 * @param {Object} [params]
+	 * @param {Ext.data.TreeModel} [params.node]
+	 * 
+	 * @return {Ext.Promise}
+	 * @return {Object} return.resolve
+	 * @return {Ext.data.Model[]} return.resolve.records
+	 * @return {Ext.data.operation.Operation} return.resolve.operation
+	 * @return {Boolean} return.resolve.success
+	 */
+	promiseLoad: function(params) {
+		params = params || {};
+		var me = this;
+		return new Ext.Promise(function(resolve, reject) {
+			params.callback = function(records, operation, success) {
+				return resolve({
+					records: records,
+					operation: operation,
+					success: success
+				});
+			};
+			me.load(params);
+		});
+	},
+	
 });

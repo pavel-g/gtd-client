@@ -98,7 +98,6 @@ Ext.define('Gtd.view.TaskTree', {
 		});
 		win.show();
 		win.on('okclick', function(data) {
-			var store = this.getStore();
 			var task = Ext.create('Gtd.model.TaskTree', data);
 			task.set('id', null);
 			task.save({
@@ -106,14 +105,7 @@ Ext.define('Gtd.view.TaskTree', {
 					if (!success) {
 						return;
 					}
-					store.on('load', function() {
-						this.expandPath('/root/' + record.getFullPath(), {
-							field: 'id',
-							separator: '/',
-							select: true
-						});
-					}, me, {single: true});
-					store.load();
+					me.reloadAll();
 				}
 			});
 		}, this, {single: true});
@@ -138,15 +130,7 @@ Ext.define('Gtd.view.TaskTree', {
 				if (!success) {
 					return;
 				}
-				var store = me.store;
-				store.on('load', function() {
-					this.expandPath('/root/' + node.getFullPath(), {
-						field: 'id',
-						separator: '/',
-						select: true
-					})
-				}, me, {single: true});
-				store.load();
+				me.reloadAll();
 			}
 		});
 	},
@@ -176,15 +160,7 @@ Ext.define('Gtd.view.TaskTree', {
 					if (!success) {
 						return;
 					}
-					var store = me.store;
-					store.on('load', function() {
-						this.expandPath('/root/' + record.getFullPath(), {
-							field: 'id',
-							separator: '/',
-							select: true
-						});
-					}, me, {single: true});
-					store.load();
+					me.reloadAll();
 				}
 			})
 		}, this, {single: true});
@@ -206,18 +182,71 @@ Ext.define('Gtd.view.TaskTree', {
 				if (!success) {
 					return;
 				}
-				var store = me.store;
-				store.on('load', function() {
-					if (Ext.isEmpty(parentPath)) {
-						return;
-					}
-					me.expandPath('/root/' + parentPath, {
-						field: 'id',
-						separator: '/'
-					});
-				}, me, {single: true});
-				store.load();
+				me.reloadAll();
 			}
+		});
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 * @return {Gtd.model.TaskTree[]/Ext.data.TreeModel[]}
+	 */
+	getExpandedNodes: function() {
+		var res = [];
+		var store = this.getStore();
+		store.each(function(node) {
+			if (node.isExpanded()) {
+				res.push(node);
+			}
+		});
+		return res;
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 * @return {String[]}
+	 */
+	getExpandedPaths: function() {
+		var res = [];
+		var nodes = this.getExpandedNodes();
+		for (var i = 0; i < nodes.length; i++) {
+			res.push(nodes[i].getFullPath());
+		}
+		return res;
+	},
+	
+	/**
+	 * @method
+	 * @return {Ext.Promise}
+	 */
+	reloadAll: function() {
+		var me = this;
+		var paths = me.getExpandedPaths();
+		return this.getStore().promiseLoad().then(function(res) {
+			if (!res.success) {
+				return;
+			}
+			var promises = [];
+			for (var i = 0; i < paths.length; i++) {
+				var path = paths[i];
+				var promise = new Ext.Promise(function(resolve, reject) {
+					me.expandPath('/root/' + path, {
+						field: 'id',
+						separator: '/',
+						callback: function(success, record, node) {
+							return resolve({
+								success: success,
+								record: record,
+								node: node
+							});
+						}
+					});
+				});
+				promises.push(promise);
+			}
+			return Ext.Promise.all(promises);
 		});
 	},
 	
