@@ -106,7 +106,7 @@ Ext.define('Gtd.view.TaskTree', {
 						return;
 					}
 					me.reloadAll().then(function() {
-						me.expandPath('/root/' + record.getFullPath(), {
+						return me.promiseExpandPath('/root/' + record.getFullPath(), {
 							field: 'id',
 							separator: '/'
 						});
@@ -180,7 +180,6 @@ Ext.define('Gtd.view.TaskTree', {
 		if (!task) {
 			return;
 		}
-		var parentPath = task.get('path');
 		var me = this;
 		task.erase({
 			callback: function(record, operation, success) {
@@ -236,22 +235,36 @@ Ext.define('Gtd.view.TaskTree', {
 			var promises = [];
 			for (var i = 0; i < paths.length; i++) {
 				var path = paths[i];
-				var promise = new Ext.Promise(function(resolve, reject) {
-					me.expandPath('/root/' + path, {
-						field: 'id',
-						separator: '/',
-						callback: function(success, record, node) {
-							return resolve({
-								success: success,
-								record: record,
-								node: node
-							});
-						}
-					});
+				var promise = me.promiseExpandPath('/root/' + path, {
+					field: 'id',
+					separator: '/'
 				});
 				promises.push(promise);
 			}
 			return Ext.Promise.all(promises);
+		});
+	},
+
+	/**
+	 * @method
+	 * @return {Ext.Promise}
+	 * @return {Object} return.resolve
+	 * @return {Boolean} return.resolve.success
+	 * @return {Gtd.model.TaskTree/Ext.data.TreeModel} return.resolve.record
+	 * @return {Object} return.resolve.node
+	 */
+	promiseExpandPath: function(path, params) {
+		params = params || {};
+		var me = this;
+		return new Ext.Promise(function (resolve) {
+			params.callback = function (success, record, node) {
+				return resolve({
+					success: success,
+					record: record,
+					node: node
+				});
+			}
+			return me.expandPath(path, params);
 		});
 	},
 	
