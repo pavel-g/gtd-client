@@ -105,7 +105,12 @@ Ext.define('Gtd.view.TaskTree', {
 					if (!success) {
 						return;
 					}
-					me.reloadAll();
+					me.reloadAll().then(function() {
+						me.expandPath('/root/' + record.getFullPath(), {
+							field: 'id',
+							separator: '/'
+						});
+					});
 				}
 			});
 		}, this, {single: true});
