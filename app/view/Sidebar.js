@@ -14,13 +14,11 @@ Ext.define('Gtd.view.Sidebar', {
 	 */
 	initComponent: function () {
 		this.items = [
-			{
-				html: '<p>Пожалуйста, выберите задачу</p>'
-			},
+			this.getEmptyPanel(),
 			this.getInfoPanel()
 		];
 		this.callParent();
-		this.setActiveItem(1);
+		this.setActiveItem(this.getEmptyPanel());
 	},
 	
 	/**
@@ -37,6 +35,24 @@ Ext.define('Gtd.view.Sidebar', {
 			this.infoPanel = Ext.create('Ext.panel.Panel', {});
 		}
 		return this.infoPanel;
+	},
+	
+	/**
+	 * @property {Ext.panel.Panel} emptyPanel
+	 * @private
+	 */
+	
+	/**
+	 * @method
+	 * @return {Ext.panel.Panel}
+	 */
+	getEmptyPanel: function () {
+		if (!this.emptyPanel) {
+			this.emptyPanel = Ext.create('Ext.panel.Panel', {
+				html: '<p>Пожалуйста, выберите задачу</p>'
+			});
+		}
+		return this.emptyPanel;
 	}
 	
 });
