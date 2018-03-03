@@ -56,6 +56,7 @@ Ext.define('Gtd.MainView', {
 		/** @type {Gtd.view.TaskTree} */  
 		var tree = this.getTaskTree();
 		tree.on('select', this.onSelectTaskTree, this);
+		tree.on('selectionchange', this.onSelectionChange, this);
 	},
 	
 	onSelectTaskList: function(gridpanel, record) {
@@ -70,6 +71,8 @@ Ext.define('Gtd.MainView', {
 	 * @param {Gtd.view.TaskTree} treepanel
 	 */
 	onSelectTaskTree: function(treepanel, record) {
+		var sidebar = this.getSidebar();
+		sidebar.fireEvent('taskchanged', record);
 	},
 	
 	/**
@@ -89,6 +92,19 @@ Ext.define('Gtd.MainView', {
 			});
 		}
 		return this.sidebar;
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 * @param {Gtd.view.TaskTree/Ext.tree.Panel} treepanel
+	 * @param {Gtd.model.TaskTree[]/Ext.data.TreeModel[]} selected
+	 */
+	onSelectionChange: function(treepanel, selected) {
+		if (Ext.isEmpty(selected)) {
+			var sidebar = this.getSidebar();
+			sidebar.fireEvent('taskchanged', null);
+		}
 	}
 	
 });

@@ -33,7 +33,15 @@ Ext.define('Gtd.view.Sidebar', {
 	 */
 	getInfoPanel: function () {
 		if (!this.infoPanel) {
-			this.infoPanel = Ext.create('Ext.panel.Panel', {});
+			this.infoPanel = Ext.create('Ext.panel.Panel', {
+				layout: 'form',
+				items: [
+					this.getTitleLabel(),
+					this.getDescriptionField(),
+					this.getHashTagsField(),
+					this.getRepeatRulesField()
+				]
+			});
 		}
 		return this.infoPanel;
 	},
@@ -67,17 +75,111 @@ Ext.define('Gtd.view.Sidebar', {
 	/**
 	 * @method
 	 * @protected
-	 * @param {Gtd.model.TaskTree/Ext.data.TreeModel} task
+	 * @param {Gtd.model.TaskTree/Ext.data.TreeModel/null} task
 	 */
 	onTaskChanged: function(task) {
-		// TODO: code for onTaskChanged
+		if (!task) {
+			this.setActiveItem(this.getEmptyPanel());
+			return;
+		}
+		this.setTask(task);
+		this.setActiveItem(this.getInfoPanel());
 	},
 	
 	/**
 	 * Event fired from Gtd.view.TaskTree by select event
 	 * 
 	 * @event taskchanged
-	 * @param {Gtd.model.TaskTree/Ext.data.TreeModel} data
+	 * @param {Gtd.model.TaskTree/Ext.data.TreeModel/null} data
 	 */
+	
+	/**
+	 * @property {Gtd.model.TaskTree/Ext.data.TreeModel} task
+	 * @private
+	 */
+	
+	/**
+	 * @method
+	 * @param {Gtd.model.TaskTree/Ext.data.TreeModel} task
+	 */
+	setTask: function(task) {
+		this.task = task;
+		
+		var titleField = this.getTitleLabel();
+		titleField.setText(task.get('title'));
+		
+		var descriptionField = this.getDescriptionField();
+		descriptionField.setValue(task.get('description'));
+	},
+	
+	/**
+	 * @property {Ext.form.Label} titleLabel
+	 * @private
+	 */
+	
+	/**
+	 * @method
+	 * @return {Ext.form.Label}
+	 */
+	getTitleLabel: function() {
+		if (!this.titleLabel) {
+			this.titleLabel = Ext.create('Ext.form.Label');
+		}
+		return this.titleLabel;
+	},
+	
+	/**
+	 * @property {Ext.form.field.TextArea} descriptionField
+	 * @private
+	 */
+	
+	/**
+	 * @method
+	 * @return {Ext.form.field.TextArea}
+	 */
+	getDescriptionField: function() {
+		if (!this.descriptionField) {
+			this.descriptionField = Ext.create('Ext.form.field.TextArea', {
+				fieldLabel: 'Описание'
+			});
+		}
+		return this.descriptionField;
+	},
+	
+	/**
+	 * @property {Ext.form.field.Display} hashTagsField
+	 * @private
+	 */
+	
+	/**
+	 * @method
+	 * @return {Ext.form.field.Display}
+	 */
+	getHashTagsField: function() {
+		if (!this.hashTagsField) {
+			this.hashTagsField = Ext.create('Ext.form.field.Display', {
+				fieldLabel: 'Хештеги'
+			});
+		}
+		return this.hashTagsField;
+	},
+	
+	/**
+	 * @property {Ext.form.field.Display} repeatRulesField
+	 * @private
+	 */
+	
+	/**
+	 * @method
+	 * @return {Ext.form.field.Display}
+	 */
+	getRepeatRulesField: function() {
+		if (!this.repeatRulesField) {
+			this.repeatRulesField = Ext.create('Ext.form.field.Display', {
+				fieldLabel: 'Повтор'
+			});
+		}
+		return this.repeatRulesField;
+	},
 	
 });
