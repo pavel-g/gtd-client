@@ -19,6 +19,7 @@ Ext.define('Gtd.view.Sidebar', {
 		];
 		this.callParent();
 		this.setActiveItem(this.getEmptyPanel());
+		this.initListeners();
 	},
 	
 	/**
@@ -53,6 +54,30 @@ Ext.define('Gtd.view.Sidebar', {
 			});
 		}
 		return this.emptyPanel;
-	}
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 */
+	initListeners: function() {
+		this.on('taskchanged', this.onTaskChanged, this);
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 * @param {Gtd.model.TaskTree/Ext.data.TreeModel} task
+	 */
+	onTaskChanged: function(task) {
+		// TODO: code for onTaskChanged
+	},
+	
+	/**
+	 * Event fired from Gtd.view.TaskTree by select event
+	 * 
+	 * @event taskchanged
+	 * @param {Gtd.model.TaskTree/Ext.data.TreeModel} data
+	 */
 	
 });

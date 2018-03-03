@@ -17,7 +17,8 @@ Ext.define('Gtd.MainView', {
 	initComponent: function() {
 		this.items = [
 			this.getTaskList(),
-			this.getTaskTree()
+			this.getTaskTree(),
+			this.getSidebar()
 		];
 		this.callParent();
 		this.initListeners();
@@ -35,6 +36,10 @@ Ext.define('Gtd.MainView', {
 		return this.taskList;
 	},
 	
+	/**
+	 * @method
+	 * @return {Gtd.view.TaskTree}
+	 */
 	getTaskTree: function() {
 		if (this.taskTree) {
 			return this.taskTree;
@@ -48,6 +53,9 @@ Ext.define('Gtd.MainView', {
 	initListeners: function() {
 		var list = this.getTaskList(); // Gtd.view.TaskList
 		list.on('select', this.onSelectTaskList, this);
+		/** @type {Gtd.view.TaskTree} */  
+		var tree = this.getTaskTree();
+		tree.on('select', this.onSelectTaskTree, this);
 	},
 	
 	onSelectTaskList: function(gridpanel, record) {
@@ -55,5 +63,32 @@ Ext.define('Gtd.MainView', {
 		var tree = this.getTaskTree(); // Gtd.view.TaskTree
 		tree.setListId(id);
 	},
+	
+	/**
+	 * @method
+	 * @protected
+	 * @param {Gtd.view.TaskTree} treepanel
+	 */
+	onSelectTaskTree: function(treepanel, record) {
+	},
+	
+	/**
+	 * @property {Gtd.view.Sidebar} sidebar
+	 * @private
+	 */
+	
+	/**
+	 * @method
+	 * @return {Gtd.view.Sidebar}
+	 */
+	getSidebar: function() {
+		if (!this.sidebar) {
+			this.sidebar = Ext.create('Gtd.view.Sidebar', {
+				region: 'east',
+				width: 250
+			});
+		}
+		return this.sidebar;
+	}
 	
 });
