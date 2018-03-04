@@ -1,0 +1,26 @@
+{
+  "name": "gtd-client",
+  "version": "0.0.1",
+  "description": "Taskflower client",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node_modules/.bin/babel src/ -d app/",
+    "flow": "node_modules/.bin/flow"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pavel-g/gtd-client.git"
+  },
+  "author": "Gnedov Pavel <pavel@gnedov.info>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/pavel-g/gtd-client/issues"
+  },
+  "homepage": "https://github.com/pavel-g/gtd-client#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-flow": "^6.23.0",
+    "flow-bin": "^0.66.0"
+  }
+}

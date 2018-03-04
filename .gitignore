@@ -1,3 +1,5 @@
 /extjs
 /resources/fontawesome/fontawesome-all.min.js
 /docs
+/package-lock.json
+/node_modules
