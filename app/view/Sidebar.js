@@ -7,6 +7,10 @@ Ext.define('Gtd.view.Sidebar', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.Gtd.view.Sidebar',
 	
+	mixins: [
+		'Gtd.view.mixins.GetChildCmp',
+	],
+	
 	layout: 'card',
 	
 	/**
@@ -14,8 +18,45 @@ Ext.define('Gtd.view.Sidebar', {
 	 */
 	initComponent: function () {
 		this.items = [
-			this.getEmptyPanel(),
-			this.getInfoPanel()
+			{
+				xtype: 'panel',
+				html: '<p>Пожалуйста, выберите задачу</p>',
+				reference: 'emptyPanel'
+			},
+			{
+				xtype: 'panel',
+				reference: 'infoPanel',
+				layout: 'anchor',
+				bodyPadding: 5,
+				defaults: {
+					labelAlign: 'left',
+					width: '100%'
+				},
+				items: [
+					{
+						xtype: 'label',
+						reference: 'titleLabel',
+						labelAlign: 'top',
+					},
+					{
+						xtype: 'textareafield',
+						reference: 'descriptionField',
+						fieldLabel: 'Описание',
+						readOnly: true,
+						labelAlign: 'top',
+					},
+					{
+						xtype: 'displayfield',
+						reference: 'hashTagsField',
+						fieldLabel: 'Хештеги',
+					},
+					{
+						xtype: 'displayfield',
+						reference: 'repeatRulesField',
+						fieldLabel: 'Повтор',
+					},
+				]
+			}
 		];
 		this.callParent();
 		this.setActiveItem(this.getEmptyPanel());
@@ -32,36 +73,15 @@ Ext.define('Gtd.view.Sidebar', {
 	 * @return {Ext.panel.Panel}
 	 */
 	getInfoPanel: function () {
-		if (!this.infoPanel) {
-			this.infoPanel = Ext.create('Ext.panel.Panel', {
-				layout: 'form',
-				items: [
-					this.getTitleLabel(),
-					this.getDescriptionField(),
-					this.getHashTagsField(),
-					this.getRepeatRulesField()
-				]
-			});
-		}
-		return this.infoPanel;
+		return this.getChildCmp('infoPanel');
 	},
-	
-	/**
-	 * @property {Ext.panel.Panel} emptyPanel
-	 * @private
-	 */
 	
 	/**
 	 * @method
 	 * @return {Ext.panel.Panel}
 	 */
 	getEmptyPanel: function () {
-		if (!this.emptyPanel) {
-			this.emptyPanel = Ext.create('Ext.panel.Panel', {
-				html: '<p>Пожалуйста, выберите задачу</p>'
-			});
-		}
-		return this.emptyPanel;
+		return this.getChildCmp('emptyPanel');
 	},
 	
 	/**
@@ -113,73 +133,35 @@ Ext.define('Gtd.view.Sidebar', {
 	},
 	
 	/**
-	 * @property {Ext.form.Label} titleLabel
-	 * @private
-	 */
-	
-	/**
 	 * @method
 	 * @return {Ext.form.Label}
 	 */
 	getTitleLabel: function() {
-		if (!this.titleLabel) {
-			this.titleLabel = Ext.create('Ext.form.Label');
-		}
-		return this.titleLabel;
+		return this.getChildCmp('titleLabel');
 	},
-	
-	/**
-	 * @property {Ext.form.field.TextArea} descriptionField
-	 * @private
-	 */
 	
 	/**
 	 * @method
 	 * @return {Ext.form.field.TextArea}
 	 */
 	getDescriptionField: function() {
-		if (!this.descriptionField) {
-			this.descriptionField = Ext.create('Ext.form.field.TextArea', {
-				fieldLabel: 'Описание'
-			});
-		}
-		return this.descriptionField;
+		return this.getChildCmp('descriptionField');
 	},
-	
-	/**
-	 * @property {Ext.form.field.Display} hashTagsField
-	 * @private
-	 */
 	
 	/**
 	 * @method
 	 * @return {Ext.form.field.Display}
 	 */
 	getHashTagsField: function() {
-		if (!this.hashTagsField) {
-			this.hashTagsField = Ext.create('Ext.form.field.Display', {
-				fieldLabel: 'Хештеги'
-			});
-		}
-		return this.hashTagsField;
+		return this.getChildCmp('hashTagsField');
 	},
-	
-	/**
-	 * @property {Ext.form.field.Display} repeatRulesField
-	 * @private
-	 */
 	
 	/**
 	 * @method
 	 * @return {Ext.form.field.Display}
 	 */
 	getRepeatRulesField: function() {
-		if (!this.repeatRulesField) {
-			this.repeatRulesField = Ext.create('Ext.form.field.Display', {
-				fieldLabel: 'Повтор'
-			});
-		}
-		return this.repeatRulesField;
+		return this.getChildCmp('repeatRulesField');
 	},
 	
 });
