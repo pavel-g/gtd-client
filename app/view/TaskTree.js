@@ -287,7 +287,7 @@ Ext.define('Gtd.view.TaskTree', {
 		if (!this.sidebar) {
 			this.sidebar = Ext.create('Gtd.view.Sidebar', {
 				dock: 'right',
-				width: 250
+				width: 350
 			});
 		}
 		return this.sidebar;
