@@ -8,7 +8,8 @@ Ext.define('Gtd.view.TaskTree', {
 	
 	requires: [
 		'Gtd.store.TaskTree',
-		'Gtd.view.TaskEditor'
+		'Gtd.view.TaskEditor',
+		'Gtd.view.Sidebar',
 	],
 	
 	alias: 'widget.Gtd.view.TaskTree',
@@ -46,8 +47,13 @@ Ext.define('Gtd.view.TaskTree', {
 				handler: this.onRemoveButtonClick.bind(this)
 			}
 		];
+		this.dockedItems = [
+			this.getSidebar()
+		];
 		this.callParent();
 		this.on('checkchange', this.onCheckChange, this);
+		this.on('select', this.onSelect, this);
+		this.on('selectionchange', this.onSelectionChange, this);
 	},
 	
 	/**
@@ -266,6 +272,49 @@ Ext.define('Gtd.view.TaskTree', {
 			}
 			return me.expandPath(path, params);
 		});
+	},
+	
+	/**
+	 * @property {Gtd.view.Sidebar} sidebar
+	 * @private
+	 */
+	
+	/**
+	 * @method
+	 * @return {Gtd.view.Sidebar}
+	 */
+	getSidebar: function() {
+		if (!this.sidebar) {
+			this.sidebar = Ext.create('Gtd.view.Sidebar', {
+				dock: 'right',
+				width: 250
+			});
+		}
+		return this.sidebar;
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 * @param {Gtd.view.TaskTree/Ext.tree.Panel} treepanel
+	 * @param {Gtd.model.TaskTree[]/Ext.data.TreeModel[]} selected
+	 */
+	onSelectionChange: function(treepanel, selected) {
+		if (Ext.isEmpty(selected)) {
+			var sidebar = this.getSidebar();
+			sidebar.fireEvent('taskchanged', null);
+		}
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 * @param {Gtd.view.TaskTree} treepanel
+	 * @param {Gtd.model.TaskTree/Ext.data.TreeModel} record
+	 */
+	onSelect: function(treepanel, record) {
+		var sidebar = this.getSidebar();
+		sidebar.fireEvent('taskchanged', record);
 	},
 	
 });

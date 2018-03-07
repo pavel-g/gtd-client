@@ -18,7 +18,6 @@ Ext.define('Gtd.MainView', {
 		this.items = [
 			this.getTaskList(),
 			this.getTaskTree(),
-			this.getSidebar()
 		];
 		this.callParent();
 		this.initListeners();
@@ -53,10 +52,6 @@ Ext.define('Gtd.MainView', {
 	initListeners: function() {
 		var list = this.getTaskList(); // Gtd.view.TaskList
 		list.on('select', this.onSelectTaskList, this);
-		/** @type {Gtd.view.TaskTree} */  
-		var tree = this.getTaskTree();
-		tree.on('select', this.onSelectTaskTree, this);
-		tree.on('selectionchange', this.onSelectionChange, this);
 	},
 	
 	onSelectTaskList: function(gridpanel, record) {
@@ -64,47 +59,5 @@ Ext.define('Gtd.MainView', {
 		var tree = this.getTaskTree(); // Gtd.view.TaskTree
 		tree.setListId(id);
 	},
-	
-	/**
-	 * @method
-	 * @protected
-	 * @param {Gtd.view.TaskTree} treepanel
-	 */
-	onSelectTaskTree: function(treepanel, record) {
-		var sidebar = this.getSidebar();
-		sidebar.fireEvent('taskchanged', record);
-	},
-	
-	/**
-	 * @property {Gtd.view.Sidebar} sidebar
-	 * @private
-	 */
-	
-	/**
-	 * @method
-	 * @return {Gtd.view.Sidebar}
-	 */
-	getSidebar: function() {
-		if (!this.sidebar) {
-			this.sidebar = Ext.create('Gtd.view.Sidebar', {
-				region: 'east',
-				width: 250
-			});
-		}
-		return this.sidebar;
-	},
-	
-	/**
-	 * @method
-	 * @protected
-	 * @param {Gtd.view.TaskTree/Ext.tree.Panel} treepanel
-	 * @param {Gtd.model.TaskTree[]/Ext.data.TreeModel[]} selected
-	 */
-	onSelectionChange: function(treepanel, selected) {
-		if (Ext.isEmpty(selected)) {
-			var sidebar = this.getSidebar();
-			sidebar.fireEvent('taskchanged', null);
-		}
-	}
-	
+		
 });
