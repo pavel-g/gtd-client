@@ -61,13 +61,11 @@ Ext.define('Gtd.view.TaskEditor', {
 	getData: function() {
 		var titleField = this.getTitleField();
 		var descriptionField = this.getDescriptionField();
-		var dueDateField = this.getDueDateField();
 		var parentTaskField = this.getParentTaskField();
 		var parentId = parentTaskField.getTaskId();
 		return {
 			title: titleField.getValue(),
 			description: descriptionField.getValue(),
-			due: dueDateField.getValue(),
 			parent_id: parentId,
 		};
 	},
@@ -84,11 +82,9 @@ Ext.define('Gtd.view.TaskEditor', {
 		data = data || {};
 		var titleField = this.getTitleField();
 		var descriptionField = this.getDescriptionField();
-		var dueDateField = this.getDueDateField();
 		var parentTaskField = this.getParentTaskField();
 		titleField.setValue(data.title);
 		descriptionField.setValue(data.description);
-		dueDateField.setValue(data.due);
 		this.setParentTask(data.parent_task);
 	},
 	
@@ -99,11 +95,9 @@ Ext.define('Gtd.view.TaskEditor', {
 	setTask: function(task) {
 		var titleField = this.getTitleField();
 		var descriptionField = this.getDescriptionField();
-		var dueDateField = this.getDueDateField();
 		var parentTaskField = this.getParentTaskField();
 		titleField.setValue(task.get('title'));
 		descriptionField.setValue(task.get('description'));
-		dueDateField.setValue(task.get('due'));
 		var parentTask = task.parentNode;
 		if (!parentTask || parentTask.isRoot()) {
 			parentTask = null;
@@ -138,20 +132,6 @@ Ext.define('Gtd.view.TaskEditor', {
 			});
 		}
 		return this.descriptionField;
-	},
-
-	/**
-	 * @method
-	 * @return {Ext.form.field.Date}
-	 */
-	getDueDateField: function() {
-		if (!this.dueDateField) {
-			this.dueDateField = Ext.create('Ext.form.field.Date', {
-				fieldLabel: 'Срок завершения',
-				format: 'd.m.Y'
-			});
-		}
-		return this.dueDateField;
 	},
 
 	/**
@@ -222,8 +202,7 @@ Ext.define('Gtd.view.TaskEditor', {
 		this.items = [
 			this.getTitleField(),
 			this.getDescriptionField(),
-			this.getParentTaskField(),
-			this.getDueDateField()
+			this.getParentTaskField()
 		];
 		this.buttons = [
 			this.getCancelButton(),

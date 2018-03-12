@@ -99,7 +99,6 @@ Ext.define('Gtd.view.TaskTree', {
 		win.setData({
 			title: '',
 			description: '',
-			due: null,
 			parent_task: parentTask
 		});
 		win.show();
@@ -163,7 +162,6 @@ Ext.define('Gtd.view.TaskTree', {
 		win.on('okclick', function(data) {
 			task.set('title', data.title);
 			task.set('description', data.description);
-			task.set('due', data.due);
 			task.set('parent_id', data.parent_id);
 			var me = this;
 			task.save({

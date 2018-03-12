@@ -12,7 +12,6 @@ Ext.define('Gtd.model.TaskTree', {
 		{name: 'title', type: 'string'},
 		{name: 'description', type: 'string', allowNull: true},
 		{name: 'created', type: 'date', allowNull: true},
-		{name: 'due', type: 'date', allowNull: true},
 		{name: 'removed', type: 'date', allowNull: true},
 		{name: 'completed', type: 'date', allowNull: true},
 		{name: 'path', type: 'string', allowNull: true},
