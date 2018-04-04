@@ -51,8 +51,10 @@ Ext.define('Gtd.model.TaskTree', {
 			successProperty: 'success',
 			messageProperty: 'message',
 			transform: function(data) {
-				var items = data.data;
-				Ext.Array.each(items, function(item) {
+				if (!data.data) {
+					return data; 
+				}
+				Ext.Array.each(data.data, function(item) {
 					if (typeof item.hashtags === 'string') {
 						item.hashtags = JSON.parse(item.hashtags);
 					}
@@ -60,6 +62,7 @@ Ext.define('Gtd.model.TaskTree', {
 						item.repeat_rule = JSON.parse(item.repeat_rule);
 					}
 				});
+				return data;
 			}
 		}
 	},
