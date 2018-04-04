@@ -1,3 +1,5 @@
+Ext.require(['Gtd.core.RepeatTypes'], function() {
+
 /**
  * @class Gtd.view.TaskEditor
  * @extends Ext.window.Window
@@ -87,6 +89,7 @@ Ext.define('Gtd.view.TaskEditor', {
 		titleField.setValue(data.title);
 		descriptionField.setValue(data.description);
 		this.setParentTask(data.parent_task);
+		this.updateRepeatFieldsAvailableStates();
 	},
 	
 	/**
@@ -106,6 +109,7 @@ Ext.define('Gtd.view.TaskEditor', {
 			this.setParentTask(parentTask);
 		}
 		parentTaskField.setExcludedTask(task);
+		this.updateRepeatFieldsAvailableStates();
 	},
 
 	/**
@@ -351,6 +355,7 @@ Ext.define('Gtd.view.TaskEditor', {
 			this.repeatCheckbox = Ext.create('Ext.form.field.Checkbox', {
 				boxLabel: 'Повторяющаяся задача'
 			});
+			this.repeatCheckbox.on('change', this.updateRepeatFieldsAvailableStates, this);
 		}
 		return this.repeatCheckbox;
 	},
@@ -368,8 +373,12 @@ Ext.define('Gtd.view.TaskEditor', {
 		if (!this.repeatTypeCombobox) {
 			this.repeatTypeCombobox = Ext.create('Ext.form.field.ComboBox', {
 				fieldLabel: 'Тип повторения',
-				store: Ext.create('Gtd.store.RepeatTypes')
+				store: Ext.create('Gtd.store.RepeatTypes'),
+				displayField: 'name',
+				valueField: 'type',
+				editable: false,
 			});
+			this.repeatTypeCombobox.on('change', this.updateRepeatFieldsAvailableStates, this);
 		}
 		return this.repeatTypeCombobox;
 	},
@@ -392,4 +401,28 @@ Ext.define('Gtd.view.TaskEditor', {
 		return this.plusTimeField;
 	},
 	
+	/**
+	 * @method
+	 * @protected
+	 */
+	updateRepeatFieldsAvailableStates: function() {
+		var checkbox = this.getRepeatCheckbox();
+		var repeatType = this.getRepeatTypeCombobox();
+		var plusTime = this.getPlusTimeField();
+		if (!checkbox.getValue()) {
+			repeatType.setDisabled(true);
+			plusTime.setDisabled(true);
+			return;
+		}
+		repeatType.setDisabled(false);
+		var RepeatTypes = Gtd.core.RepeatTypes;
+		if (repeatType.getValue() === RepeatTypes.AUTO_REPEAT) {
+			plusTime.setDisabled(false);
+		} else {
+			plusTime.setDisabled(true);
+		}
+	},
+	
+});
+
 });
