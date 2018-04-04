@@ -18,14 +18,14 @@ Ext.define('Gtd.view.TaskEditor', {
 	
 	height: 400,
 	
-	layout: 'vbox',
+	layout: 'fit',
 	
-	defaults: {
-		labelAlign: 'top',
-		width: '100%'
-	},
+	// defaults: {
+	// 	labelAlign: 'top',
+	// 	width: '100%'
+	// },
 	
-	bodyPadding: 5,
+	// bodyPadding: 5,
 	
 	closable: false,
 	
@@ -199,10 +199,39 @@ Ext.define('Gtd.view.TaskEditor', {
 	 * @protected
 	 */
 	initComponent: function() {
+		var defaults = {
+			labelAlign: 'top',
+			width: '100%'
+		};
+		var bodyPadding = 5;
 		this.items = [
-			this.getTitleField(),
-			this.getDescriptionField(),
-			this.getParentTaskField()
+			{
+				xtype: 'tabpanel',
+				items: [
+					{
+						title: 'Основные',
+						layout: 'vbox',
+						defaults: defaults,
+						bodyPadding: bodyPadding,
+						items: [
+							this.getTitleField(),
+							this.getDescriptionField(),
+							this.getParentTaskField()
+						]
+					},
+					{
+						title: 'Атрибуты',
+						layout: 'vbox',
+						defaults: defaults,
+						bodyPadding: bodyPadding,
+						items: [
+							this.getStartField(),
+							this.getDueField(),
+							this.getHashtagsField(),
+						]
+					}
+				]
+			}
 		];
 		this.buttons = [
 			this.getCancelButton(),
@@ -241,5 +270,113 @@ Ext.define('Gtd.view.TaskEditor', {
 	/**
 	 * @event cancelclick
 	 */
+	
+	/**
+	 * @property {Ext.form.field.Date} dueField
+	 * @private
+	 */
+	
+	/**
+	 * @method
+	 * @return {Ext.form.field.Date}
+	 */
+	getDueField: function() {
+		if (!this.dueField) {
+			this.dueField = Ext.create('Ext.form.field.Date', {
+				fieldLabel: 'Дата завершения'
+			});
+		}
+		return this.dueField;
+	},
+	
+	/**
+	 * @property {Ext.form.field.Date} startField
+	 * @private
+	 */
+	
+	/**
+	 * @method
+	 * @return {Ext.form.field.Date}
+	 */
+	getStartField: function() {
+		if (!this.startField) {
+			this.startField = Ext.create('Ext.form.field.Date', {
+				fieldLabel: 'Дата начала'
+			});
+		}
+		return this.startField;
+	},
+	
+	/**
+	 * @property {Ext.form.field.Text} hashtagsField
+	 * @private
+	 */
+	
+	/**
+	 * @method
+	 * @return {Ext.form.field.Text}
+	 */
+	getHashtagsField: function() {
+		if (!this.hashtagsField) {
+			this.hashtagsField = Ext.create('Ext.form.field.Text', {
+				fieldLabel: 'Хештеги'
+			});
+		}
+		return this.hashtagsField;
+	},
+	
+	/**
+	 * @property {Ext.form.field.Checkbox} repeatCheckbox
+	 * @private
+	 */
+	
+	/**
+	 * @method
+	 * @return {Ext.form.field.Checkbox}
+	 */
+	getRepeatCheckbox: function() {
+		if (!this.repeatCheckbox) {
+			this.repeatCheckbox = Ext.create('Ext.form.field.Checkbox', {
+				boxLabel: 'Повторяющаяся задача'
+			});
+		}
+		return this.repeatCheckbox;
+	},
+	
+	/**
+	 * @property {Ext.form.field.ComboBox} repeatTypeCombobox
+	 * @private
+	 */
+	
+	/**
+	 * @method
+	 * @return {Ext.form.field.ComboBox}
+	 */
+	getRepeatTypeCombobox: function() {
+		if (!this.repeatTypeCombobox) {
+			this.repeatTypeCombobox = Ext.create('Ext.form.field.ComboBox', {
+				fieldLabel: 'Тип повторения'
+			});
+		}
+		return this.repeatTypeCombobox;
+	},
+	
+	/**
+	 * @property {Ext.form.field.Number} plusTimeField
+	 * @private
+	 */
+	
+	/**
+	 * @method
+	 * @return {Ext.form.field.Number}
+	 */
+	getPlusTimeField: function() {
+		if (!this.plusTimeField) {
+			this.plusTimeField = Ext.create('Ext.form.field.Number', {
+				fieldLabel: '+'
+			});
+		}
+		return this.plusTimeField;
+	},
 	
 });

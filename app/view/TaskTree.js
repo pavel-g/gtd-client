@@ -163,6 +163,10 @@ Ext.define('Gtd.view.TaskTree', {
 			task.set('title', data.title);
 			task.set('description', data.description);
 			task.set('parent_id', data.parent_id);
+			task.set('due', data.due);
+			task.set('start', data.start);
+			task.set('hashtags', data.hashtags);
+			task.set('repeat_rule', data.repeat_rule);
 			var me = this;
 			task.save({
 				callback: function(record, operation, success) {
