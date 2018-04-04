@@ -7,7 +7,8 @@ Ext.define('Gtd.view.TaskEditor', {
 	extend: 'Ext.window.Window',
 
 	requires: [
-		'Gtd.view.fields.ParentTask'
+		'Gtd.view.fields.ParentTask',
+		'Gtd.store.RepeatTypes'
 	],
 	
 	title: 'Добавление задачи',
@@ -229,6 +230,17 @@ Ext.define('Gtd.view.TaskEditor', {
 							this.getDueField(),
 							this.getHashtagsField(),
 						]
+					},
+					{
+						title: 'Повтор',
+						layout: 'vbox',
+						defaults: defaults,
+						bodyPadding: bodyPadding,
+						items: [
+							this.getRepeatCheckbox(),
+							this.getRepeatTypeCombobox(),
+							this.getPlusTimeField()
+						]
 					}
 				]
 			}
@@ -355,7 +367,8 @@ Ext.define('Gtd.view.TaskEditor', {
 	getRepeatTypeCombobox: function() {
 		if (!this.repeatTypeCombobox) {
 			this.repeatTypeCombobox = Ext.create('Ext.form.field.ComboBox', {
-				fieldLabel: 'Тип повторения'
+				fieldLabel: 'Тип повторения',
+				store: Ext.create('Gtd.store.RepeatTypes')
 			});
 		}
 		return this.repeatTypeCombobox;
@@ -373,7 +386,7 @@ Ext.define('Gtd.view.TaskEditor', {
 	getPlusTimeField: function() {
 		if (!this.plusTimeField) {
 			this.plusTimeField = Ext.create('Ext.form.field.Number', {
-				fieldLabel: '+'
+				fieldLabel: 'Число дней для автоповтора'
 			});
 		}
 		return this.plusTimeField;
