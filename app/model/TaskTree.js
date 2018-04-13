@@ -18,6 +18,7 @@ Ext.define('Gtd.model.TaskTree', {
 		{name: 'due', type: 'date', allowNull: true},
 		{name: 'hashtags', allowNull: true},
 		{name: 'repeat_rule', allowNull: true},
+		{name: 'priority', allowNull: true},
 		{name: 'start', type: 'date', allowNull: true},
 		{
 			name: 'checked',
@@ -78,6 +79,29 @@ Ext.define('Gtd.model.TaskTree', {
 			return id;
 		}
 		return path + '/' + id;
+	},
+	
+	/**
+	 * @method
+	 * @return {String}
+	 */
+	getHashtagsAsString: function() {
+		var value = this.get('hashtags');
+		return value ? value.join(',') : '';
+	},
+	
+	/**
+	 * @method
+	 * @param {String} value
+	 * @param {Object} params
+	 */
+	setHashtagsFromString: function(value, params) {
+		params = params || {};
+		var values = value.split(',');
+		for (var i in values) {if (values.hasOwnProperty(i)) {
+			values[i] = values[i].trim();
+		}}
+		this.set('hashtags', values, params);
 	},
 	
 });

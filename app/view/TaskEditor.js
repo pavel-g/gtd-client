@@ -66,10 +66,17 @@ Ext.define('Gtd.view.TaskEditor', {
 		var descriptionField = this.getDescriptionField();
 		var parentTaskField = this.getParentTaskField();
 		var parentId = parentTaskField.getTaskId();
+		var startField = this.getStartField();
+		var dueField = this.getDueField();
+		var priorityField = this.getPriorityField();
 		return {
 			title: titleField.getValue(),
 			description: descriptionField.getValue(),
 			parent_id: parentId,
+			start: startField.getValue(),
+			due: dueField.getValue(),
+			priority: priorityField.getValue(),
+			hashtags: this.getHashtagsValue()
 		};
 	},
 
@@ -100,8 +107,15 @@ Ext.define('Gtd.view.TaskEditor', {
 		var titleField = this.getTitleField();
 		var descriptionField = this.getDescriptionField();
 		var parentTaskField = this.getParentTaskField();
+		var startField = this.getStartField();
+		var dueField = this.getDueField();
+		var priorityField = this.getPriorityField();
 		titleField.setValue(task.get('title'));
 		descriptionField.setValue(task.get('description'));
+		startField.setValue(task.get('start'));
+		dueField.setValue(task.get('due'));
+		this.setHashtagsFromTask(task);
+		priorityField.setValue(task.get('priority'));
 		var parentTask = task.parentNode;
 		if (!parentTask || parentTask.isRoot()) {
 			parentTask = null;
@@ -110,6 +124,15 @@ Ext.define('Gtd.view.TaskEditor', {
 		}
 		parentTaskField.setExcludedTask(task);
 		this.updateRepeatFieldsAvailableStates();
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 */
+	setHashtagsFromTask: function(task) {
+		var hashtagsField = this.getHashtagsField();
+		hashtagsField.setValue(task.getHashtagsAsString());
 	},
 
 	/**
@@ -233,6 +256,7 @@ Ext.define('Gtd.view.TaskEditor', {
 							this.getStartField(),
 							this.getDueField(),
 							this.getHashtagsField(),
+							this.getPriorityField()
 						]
 					},
 					{
@@ -342,6 +366,30 @@ Ext.define('Gtd.view.TaskEditor', {
 	},
 	
 	/**
+	 * @method
+	 * @return {String[]|null}
+	 */
+	getHashtagsValue: function() {
+		var field = this.getHashtagsField();
+		var value = field.getValue();
+		if (!value || value === '') {
+			return null;
+		}
+		var hashtags = value.split(',');
+		var res = [];
+		for (var i in hashtags) {if (hashtags.hasOwnProperty(i)) {
+			var hashtag = hashtags[i].trim();
+			if (hashtag && hashtag !== '') {
+				res.push(hashtag);
+			}
+		}}
+		if (res.length === 0) {
+			return null;
+		}
+		return res;
+	},
+	
+	/**
 	 * @property {Ext.form.field.Checkbox} repeatCheckbox
 	 * @private
 	 */
@@ -421,6 +469,24 @@ Ext.define('Gtd.view.TaskEditor', {
 		} else {
 			plusTime.setDisabled(true);
 		}
+	},
+	
+	/**
+	 * @property {Ext.form.field.Number} priorityField
+	 * @private
+	 */
+	
+	/**
+	 * @method
+	 * @return {Ext.form.field.Number}
+	 */
+	getPriorityField: function() {
+		if (!this.priorityField) {
+			this.priorityField = Ext.create('Ext.form.field.Number', {
+				fieldLabel: 'Приоритет'
+			});
+		}
+		return this.priorityField;
 	},
 	
 });
