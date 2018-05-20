@@ -325,7 +325,8 @@ Ext.define('Gtd.view.TaskEditor', {
 	getDueField: function() {
 		if (!this.dueField) {
 			this.dueField = Ext.create('Ext.form.field.Date', {
-				fieldLabel: 'Дата завершения'
+				fieldLabel: 'Дата завершения',
+				format: Gtd.core.Constants.DATE_FORMAT
 			});
 		}
 		return this.dueField;
@@ -343,7 +344,8 @@ Ext.define('Gtd.view.TaskEditor', {
 	getStartField: function() {
 		if (!this.startField) {
 			this.startField = Ext.create('Ext.form.field.Date', {
-				fieldLabel: 'Дата начала'
+				fieldLabel: 'Дата начала',
+				format: Gtd.core.Constants.DATE_FORMAT
 			});
 		}
 		return this.startField;
