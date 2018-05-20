@@ -103,7 +103,10 @@ Ext.define('Gtd.view.TaskTree', {
 		});
 		win.show();
 		win.on('okclick', function(data) {
+			var repeatRule = data.repeat_rule;
+			delete data.repeat_rule;
 			var task = Ext.create('Gtd.model.TaskTree', data);
+			task.setRepeatRuleFromEditor(repeatRule.check, repeatRule.type, repeatRule.interval);
 			task.set('id', null);
 			task.save({
 				callback: function(record, operation, success) {
@@ -160,7 +163,10 @@ Ext.define('Gtd.view.TaskTree', {
 		win.setTask(task);
 		win.show();
 		win.on('okclick', function(data) {
+			var repeatRule = data.repeat_rule;
+			delete data.repeat_rule;
 			task.set(data);
+			task.setRepeatRuleFromEditor(repeatRule.check, repeatRule.type, repeatRule.interval);
 			var me = this;
 			task.save({
 				callback: function(record, operation, success) {
@@ -169,7 +175,7 @@ Ext.define('Gtd.view.TaskTree', {
 					}
 					me.reloadAll();
 				}
-			})
+			});
 		}, this, {single: true});
 	},
 	
@@ -265,7 +271,7 @@ Ext.define('Gtd.view.TaskTree', {
 					record: record,
 					node: node
 				});
-			}
+			};
 			return me.expandPath(path, params);
 		});
 	},

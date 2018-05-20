@@ -76,7 +76,8 @@ Ext.define('Gtd.view.TaskEditor', {
 			start: startField.getValue(),
 			due: dueField.getValue(),
 			priority: priorityField.getValue(),
-			hashtags: this.getHashtagsValue()
+			hashtags: this.getHashtagsValue(),
+			repeat_rule: this.getRepeatRule()
 		};
 	},
 
@@ -92,10 +93,10 @@ Ext.define('Gtd.view.TaskEditor', {
 		data = data || {};
 		var titleField = this.getTitleField();
 		var descriptionField = this.getDescriptionField();
-		var parentTaskField = this.getParentTaskField();
 		titleField.setValue(data.title);
 		descriptionField.setValue(data.description);
 		this.setParentTask(data.parent_task);
+		this.initRepeatFieldsValues(null);
 		this.updateRepeatFieldsAvailableStates();
 	},
 	
@@ -123,6 +124,7 @@ Ext.define('Gtd.view.TaskEditor', {
 			this.setParentTask(parentTask);
 		}
 		parentTaskField.setExcludedTask(task);
+		this.initRepeatFieldsValues(task);
 		this.updateRepeatFieldsAvailableStates();
 	},
 	
@@ -478,7 +480,7 @@ Ext.define('Gtd.view.TaskEditor', {
 	
 	/**
 	 * @method
-	 * @return {Ext.form.field.Number}
+	 * @return {Ext.ftypeorm.field.Number}
 	 */
 	getPriorityField: function() {
 		if (!this.priorityField) {
@@ -487,6 +489,64 @@ Ext.define('Gtd.view.TaskEditor', {
 			});
 		}
 		return this.priorityField;
+	},
+	
+	/**
+	 * @method
+	 * @return {Object}
+	 */
+	getRepeatRule: function() {
+		var checkField = this.getRepeatCheckbox();
+		var typeField = this.getRepeatTypeCombobox();
+		var intervalField = this.getPlusTimeField();
+		var check = checkField.getValue();
+		var type = typeField.getValue();
+		var interval = intervalField.getValue();
+		return {
+			check: check,
+			type: type,
+			interval: interval
+		};
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 * @param {Gtd.model.TaskTree/Ext.data.TreeModel/null} task
+	 */
+	initRepeatFieldsValues: function(task) {
+		if (task === null) {
+			this.resetRepeatFieldsValues();
+			return;
+		}
+		var fields = {
+			check: this.getRepeatCheckbox(),
+			type: this.getRepeatTypeCombobox(),
+			interval: this.getPlusTimeField()
+		};
+		var repeatRules = task.getRepeatRuleForEditor();
+		fields.check.setValue(repeatRules.check);
+		if (typeof repeatRules.type !== 'undefined') {
+			fields.type.setValue(repeatRules.type);
+		}
+		if (typeof repeatRules.interval !== 'undefined') {
+			fields.interval.setValue(repeatRules.interval);
+		}
+	},
+	
+	/**
+	 * @method
+	 * @protected
+	 */
+	resetRepeatFieldsValues: function() {
+		var fields = {
+			check: this.getRepeatCheckbox(),
+			type: this.getRepeatTypeCombobox(),
+			interval: this.getPlusTimeField()
+		};
+		fields.check.setValue(false);
+		fields.type.setValue(null);
+		fields.interval.setValue(null);
 	},
 	
 });

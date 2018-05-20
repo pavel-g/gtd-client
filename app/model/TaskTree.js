@@ -104,4 +104,60 @@ Ext.define('Gtd.model.TaskTree', {
 		this.set('hashtags', values, params);
 	},
 	
+	/**
+	 * @method
+	 * @param {Boolean} check
+	 * @param {String} [type]
+	 * @param {Number} [interval]
+	 */
+	setRepeatRuleFromEditor: function(check, type, interval) {
+		if (!check) {
+			this.set('repeat_rule', null);
+			return;
+		}
+		var types = Gtd.core.RepeatTypes.getTypes();
+		if (types.indexOf(type) < 0) {
+			throw new Error('Wrong value of "type');
+		}
+		var value = {
+			type: type
+		};
+		if (type === Gtd.core.RepeatTypes.BY_HAND_REPEAT) {
+			this.set('repeat_rule', value);
+			return;
+		}
+		if (!Ext.isNumeric(interval)) {
+			throw new Error('Wrong value of "interval"');
+		}
+		value.interval = Number(interval);
+		this.set('repeat_rule', value);
+	},
+	
+	/**
+	 * @method
+	 * @return {Object}
+	 * @return {Boolean} return.check
+	 * @return {String} return.type
+	 * @return {Number} return.interval
+	 */
+	getRepeatRuleForEditor: function() {
+		var repeatRule = this.get('repeat_rule');
+		if (Ext.isEmpty(repeatRule)) {
+			return {check: false};
+		}
+		var res = {
+			check: true
+		};
+		var type = repeatRule.type;
+		var types = Gtd.core.RepeatTypes.getTypes();
+		if (types.indexOf(type) < 0) {
+			throw new Error('Wrong value of "type"');
+		}
+		res.type = type;
+		if (type === Gtd.core.RepeatTypes.AUTO_REPEAT) {
+			res.interval = Number(repeatRule.interval);
+		}
+		return res;
+	},
+	
 });
